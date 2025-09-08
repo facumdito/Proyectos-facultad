@@ -1,0 +1,11 @@
+id,titulo,descripcion,estado,prioridad,fechaDeteccion,procesoAfectado,responsableDeteccion,causaRaiz
+NC001,Documento desactualizado en producción,"Se encontró un procedimiento operativo desactualizado en el área de producción línea 2",ABIERTA,MEDIA,2024-08-15,P004,Auditor Interno Juan Pérez,"Falta de control en la actualización de documentos"
+NC002,Equipos sin calibración vigente,"Tres equipos de medición críticos sin certificado de calibración válido",ABIERTA,ALTA,2024-08-20,P004,Técnico Calidad María López,"Sistema de control de calibraciones deficiente"
+NC003,Personal sin evidencia de capacitación,"Cinco operarios sin registro de capacitación en procedimientos ISO 9001",CERRADA,BAJA,2024-07-10,P007,Jefe RRHH Carlos Mendoza,"Falta de seguimiento en programa de capacitación"
+NC004,Producto no conforme entregado,"Cliente reportó productos que no cumplen especificaciones técnicas",ABIERTA,CRITICA,2024-08-25,P004,Gerente Comercial Ana Silva,"Falla en proceso de inspección final"
+NC005,Demora en tiempos de entrega,"Múltiples clientes reportan entregas fuera del plazo comprometido",EN_ANALISIS,ALTA,2024-08-28,P005,Coordinador Logística Roberto García,"Problemas en planificación de la producción"
+NC006,Incumplimiento en mantenimiento preventivo,"Equipos críticos sin mantenimiento según cronograma establecido",ABIERTA,MEDIA,2024-08-30,P009,Supervisor Mantenimiento Luis Torres,"Sobrecarga de trabajo en área de mantenimiento"
+NC007,Registro incompleto de inspecciones,"Formatos de inspección de calidad con campos sin completar",EN_CORRECCION,BAJA,2024-08-05,P012,Inspector Calidad Patricia Ruiz,"Capacitación insuficiente en uso de formatos"
+NC008,Proveedor con problemas de calidad,"Materias primas recibidas no cumplen especificaciones acordadas",ABIERTA,ALTA,2024-09-01,P008,Jefe Compras Fernando Díaz,"Falta de evaluación adecuada de proveedores"
+NC009,Área de trabajo insegura,"Condiciones de seguridad deficientes en almacén de materias primas",CERRADA,MEDIA,2024-07-20,P009,Responsable Seguridad Carmen Vega,"Falta de inspecciones regulares de seguridad"
+NC010,Documentos de calidad no controlados,"Copias no controladas de procedimientos encontradas en área operativa",EN_ANALISIS,BAJA,2024-08-18,P002,Coordinador Calidad Miguel Herrera,"Sistema de control documental inadecuado"

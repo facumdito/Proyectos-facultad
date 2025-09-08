@@ -1,0 +1,16 @@
+id,nombre,descripcion,tipo,unidadMedida,valorObjetivo,valorActual,procesoId,fechaUltimaMedicion
+I001,Cumplimiento Objetivos Estratégicos,"Porcentaje de objetivos estratégicos cumplidos en el período",EFICACIA,%,90.0,87.5,P001,2024-09-01
+I002,Índice de Satisfacción del Cliente,"Nivel promedio de satisfacción reportado por clientes",SATISFACCION,puntos,4.5,4.2,P005,2024-09-03
+I003,Tiempo de Desarrollo de Productos,"Tiempo promedio para desarrollar un nuevo producto",TIEMPO,días,120.0,135.0,P003,2024-09-02
+I004,Eficiencia de Producción,"Unidades producidas por hora de trabajo",EFICIENCIA,unid/h,50.0,48.5,P004,2024-09-04
+I005,Defectos por Millón,"Cantidad de productos defectuosos por millón producido",CALIDAD,ppm,100.0,85.0,P004,2024-09-04
+I006,Tiempo de Respuesta al Cliente,"Tiempo promedio de respuesta a consultas de clientes",TIEMPO,horas,24.0,18.5,P006,2024-09-03
+I007,Índice de Rotación de Personal,"Porcentaje anual de rotación de empleados",EFICIENCIA,%,10.0,12.5,P007,2024-09-01
+I008,Costo por Unidad Producida,"Costo promedio de producción por unidad",COSTO,USD,25.0,26.80,P004,2024-09-04
+I009,Tiempo de Entrega a Clientes,"Días promedio desde pedido hasta entrega",TIEMPO,días,7.0,6.2,P005,2024-09-03
+I010,Disponibilidad de Equipos,"Porcentaje de tiempo que equipos están operativos",EFICIENCIA,%,95.0,93.8,P009,2024-09-02
+I011,Capacitación por Empleado,"Horas promedio de capacitación por empleado al año",EFICACIA,horas,40.0,35.5,P007,2024-09-01
+I012,Cumplimiento de Entregas,"Porcentaje de pedidos entregados a tiempo",EFICACIA,%,98.0,96.5,P008,2024-09-02
+I013,Índice de Mejoras Implementadas,"Número de mejoras implementadas por mes",EFICACIA,unidades,5.0,4.0,P011,2024-09-01
+I014,Costo de No Calidad,"Costo mensual asociado a problemas de calidad",COSTO,USD,5000.0,6200.0,P012,2024-09-04
+I015,Tiempo de Resolución de Problemas,"Días promedio para resolver no conformidades",TIEMPO,días,15.0,12.8,P002,2024-09-02

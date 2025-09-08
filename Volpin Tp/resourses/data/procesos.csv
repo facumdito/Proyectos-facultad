@@ -1,0 +1,13 @@
+id,nombre,descripcion,tipo,responsable,objetivo,alcance,fechaCreacion,activo
+P001,Planificación Estratégica,"Proceso de definición de objetivos y estrategias organizacionales",ESTRATEGICO,Director General,"Establecer la dirección estratégica de la empresa","Toda la organización",2024-01-15,true
+P002,Gestión de Calidad,"Proceso de gestión del sistema de calidad ISO 9001",ESTRATEGICO,Gerente Calidad,"Mantener y mejorar la certificación ISO 9001","Todos los procesos de la empresa",2024-01-15,true
+P003,Desarrollo de Productos,"Proceso de creación y desarrollo de nuevos productos",OPERATIVO,Jefe Ingeniería,"Desarrollar productos que cumplan especificaciones de calidad","Área de I+D y Ingeniería",2024-01-20,true
+P004,Producción,"Proceso de fabricación de productos",OPERATIVO,Jefe Producción,"Fabricar productos según especificaciones y estándares","Planta de producción",2024-01-20,true
+P005,Ventas y Marketing,"Proceso de comercialización y ventas de productos",OPERATIVO,Gerente Comercial,"Aumentar ventas y satisfacción del cliente","Área comercial y marketing",2024-01-25,true
+P006,Atención al Cliente,"Proceso de servicio y soporte al cliente",OPERATIVO,Jefe Atención Cliente,"Brindar excelente servicio al cliente","Departamento de atención al cliente",2024-01-25,true
+P007,Gestión de Recursos Humanos,"Proceso de gestión del personal y desarrollo humano",APOYO,Jefe RRHH,"Gestionar el talento humano de la organización","Toda la organización",2024-02-01,true
+P008,Compras y Abastecimiento,"Proceso de adquisición de materiales y servicios",APOYO,Jefe Compras,"Asegurar suministro de calidad y oportunidad","Área de compras y logística",2024-02-01,true
+P009,Mantenimiento,"Proceso de mantenimiento de equipos e infraestructura",APOYO,Jefe Mantenimiento,"Mantener equipos en óptimas condiciones","Toda la infraestructura",2024-02-05,true
+P010,Sistemas de Información,"Proceso de gestión de tecnología de la información",APOYO,Jefe IT,"Proporcionar soporte tecnológico eficiente","Toda la organización",2024-02-05,true
+P011,Mejora Continua,"Proceso de identificación e implementación de mejoras",MEJORA,Coordinador Mejora,"Implementar mejoras sistemáticas en la organización","Todos los procesos",2024-02-10,true
+P012,Control de Calidad,"Proceso de verificación y control de la calidad",MEJORA,Inspector Calidad,"Asegurar que productos cumplan estándares","Área de producción y productos terminados",2024-02-10,true
