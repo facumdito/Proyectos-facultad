@@ -4,6 +4,8 @@ import com.iso9001.gui.DashboardPrincipal;
 import com.iso9001.utils.DatabaseHelper;
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  * Clase principal del Sistema de Gestión de Calidad ISO 9001
@@ -52,7 +54,7 @@ public class MainApplication {
     private static void configurarLookAndFeel() {
         try {
             // Intentar usar el Look & Feel del sistema
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeel());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
             // Configuraciones adicionales de UI
             UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 12));
@@ -67,11 +69,10 @@ public class MainApplication {
             // Continuar con el Look & Feel por defecto
         }
     }
-
     /**
      * Muestra una pantalla de carga inicial
      */
-    private static void mostrarSplashScreen() {
+    private static void mostrarSplashScreen (){
         JFrame splash = new JFrame();
         splash.setUndecorated(true);
         splash.setSize(500, 300);
