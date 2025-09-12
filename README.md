@@ -43,15 +43,6 @@ Tablas principales:
 - empleados (certificaciones y competencias)
 ```
 
----
-
-## 🚀 Instalación y Configuración
-
-### 📋 Prerrequisitos
-- Java 17+
-- MySQL 8.0+
-- Maven 3.8+
-- IDE (Eclipse/IntelliJ)
 
 ### ⚙️ Configuración Paso a Paso
 
