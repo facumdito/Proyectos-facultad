@@ -140,8 +140,7 @@ public class ProcesoManager {
         if (proceso.getId() == null || proceso.getId().trim().isEmpty()) return false;
         if (proceso.getNombre() == null || proceso.getNombre().trim().isEmpty()) return false;
         if (proceso.getTipo() == null) return false;
-        if (proceso.getResponsable() == null || proceso.getResponsable().trim().isEmpty()) return false;
-        return true;
+        return proceso.getResponsable() != null && !proceso.getResponsable().trim().isEmpty();
     }
 
     // Reportes

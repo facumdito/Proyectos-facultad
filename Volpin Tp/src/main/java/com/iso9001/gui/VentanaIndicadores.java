@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class VentanaIndicadores extends JFrame {
-    private IndicadorManager indicadorManager;
+    private final IndicadorManager indicadorManager;
 
     private JTable tablaIndicadores;
     private DefaultTableModel modeloTabla;
@@ -24,20 +24,19 @@ public class VentanaIndicadores extends JFrame {
 
     public VentanaIndicadores(IndicadorManager indicadorManager) {
         this.indicadorManager = indicadorManager;
-
-        configurarVentana();
-        crearComponentes();
-        cargarDatos();
+        // NO llamar configurarVentana aquí - se llamará desde el Dashboard
     }
 
-    private void configurarVentana() {
+    // Método público para configurar la ventana
+    public void configurarVentana() {
         setTitle("Gestión de Indicadores de Calidad");
         setSize(1200, 800);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
     }
 
-    private void crearComponentes() {
+    // Método público para crear componentes
+    public void crearComponentes() {
         // Panel superior - Filtros
         JPanel panelFiltros = crearPanelFiltros();
         add(panelFiltros, BorderLayout.NORTH);
@@ -66,6 +65,32 @@ public class VentanaIndicadores extends JFrame {
         // Panel inferior - Botones
         JPanel panelBotones = crearPanelBotones();
         add(panelBotones, BorderLayout.SOUTH);
+    }
+
+    // Método público para cargar datos
+    public void cargarDatos() {
+        try {
+            modeloTabla.setRowCount(0);
+            List<Indicador> indicadores = indicadorManager.obtenerTodosIndicadores();
+
+            for (Indicador indicador : indicadores) {
+                Object[] fila = {
+                        indicador.getId(),
+                        indicador.getNombre(),
+                        indicador.getTipo().getNombre(),
+                        String.format("%.2f", indicador.getValorActual()),
+                        String.format("%.2f", indicador.getValorObjetivo()),
+                        indicador.getEstadoSemaforo(),
+                        String.format("%.1f%%", indicador.calcularTendencia())
+                };
+
+                modeloTabla.addRow(fila);
+            }
+
+            actualizarEstadisticasGenerales();
+        } catch (Exception e) {
+            System.err.println("Error cargando datos de indicadores: " + e.getMessage());
+        }
     }
 
     private JPanel crearPanelFiltros() {
@@ -173,17 +198,17 @@ public class VentanaIndicadores extends JFrame {
         panelEstadisticas.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Crear tarjetas de estadísticas
-        panelEstadisticas.add(crearTarjetaEstadistica("Total", "0", Color.BLUE));
-        panelEstadisticas.add(crearTarjetaEstadistica("Verde", "0", new Color(39, 174, 96)));
-        panelEstadisticas.add(crearTarjetaEstadistica("Amarillo", "0", new Color(241, 196, 15)));
-        panelEstadisticas.add(crearTarjetaEstadistica("Rojo", "0", new Color(231, 76, 60)));
+        panelEstadisticas.add(crearTarjetaEstadistica("Total", Color.BLUE));
+        panelEstadisticas.add(crearTarjetaEstadistica("Verde", new Color(39, 174, 96)));
+        panelEstadisticas.add(crearTarjetaEstadistica("Amarillo", new Color(241, 196, 15)));
+        panelEstadisticas.add(crearTarjetaEstadistica("Rojo", new Color(231, 76, 60)));
 
         panel.add(panelEstadisticas, BorderLayout.CENTER);
 
         return panel;
     }
 
-    private JPanel crearTarjetaEstadistica(String titulo, String valor, Color color) {
+    private JPanel crearTarjetaEstadistica(String titulo, Color color) {
         JPanel tarjeta = new JPanel(new BorderLayout());
         tarjeta.setBackground(color);
         tarjeta.setBorder(BorderFactory.createRaisedBevelBorder());
@@ -192,7 +217,7 @@ public class VentanaIndicadores extends JFrame {
         lblTitulo.setForeground(Color.WHITE);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 12));
 
-        JLabel lblValor = new JLabel(valor, SwingConstants.CENTER);
+        JLabel lblValor = new JLabel("0", SwingConstants.CENTER);
         lblValor.setForeground(Color.WHITE);
         lblValor.setFont(new Font("Arial", Font.BOLD, 24));
 
@@ -232,27 +257,6 @@ public class VentanaIndicadores extends JFrame {
         panel.add(btnCerrar);
 
         return panel;
-    }
-
-    private void cargarDatos() {
-        modeloTabla.setRowCount(0);
-        List<Indicador> indicadores = indicadorManager.obtenerTodosIndicadores();
-
-        for (Indicador indicador : indicadores) {
-            Object[] fila = {
-                    indicador.getId(),
-                    indicador.getNombre(),
-                    indicador.getTipo().getNombre(),
-                    String.format("%.2f", indicador.getValorActual()),
-                    String.format("%.2f", indicador.getValorObjetivo()),
-                    indicador.getEstadoSemaforo(),
-                    String.format("%.1f%%", indicador.calcularTendencia())
-            };
-
-            modeloTabla.addRow(fila);
-        }
-
-        actualizarEstadisticasGenerales();
     }
 
     private void filtrarIndicadores() {
@@ -364,8 +368,7 @@ public class VentanaIndicadores extends JFrame {
 
     private void actualizarEstadisticasGenerales() {
         Component[] componentes = panelGraficos.getComponents();
-        if (componentes.length > 0 && componentes[0] instanceof JPanel) {
-            JPanel panelEst = (JPanel) componentes[0];
+        if (componentes.length > 0 && componentes[0] instanceof JPanel panelEst) {
             Component[] tarjetas = panelEst.getComponents();
 
             if (tarjetas.length >= 4) {
@@ -380,11 +383,12 @@ public class VentanaIndicadores extends JFrame {
 
     private void mostrarFormularioNuevoIndicador() {
         JOptionPane.showMessageDialog(this,
-                "Funcionalidad de creación de indicadores disponible en la versión completa.\n" +
-                        "Esta ventana permitiría:\n" +
-                        "- Definir nuevo indicador\n" +
-                        "- Configurar fórmula de cálculo\n" +
-                        "- Establecer objetivos y umbrales",
+                """
+                        Funcionalidad de creación de indicadores disponible en la versión completa.
+                        Esta ventana permitiría:
+                        - Definir nuevo indicador
+                        - Configurar fórmula de cálculo
+                        - Establecer objetivos y umbrales""",
                 "Nuevo Indicador",
                 JOptionPane.INFORMATION_MESSAGE);
     }
@@ -486,7 +490,7 @@ public class VentanaIndicadores extends JFrame {
     }
 
     // Renderer personalizado para la columna de estado
-    private class EstadoRenderer extends JLabel implements TableCellRenderer {
+    private static class EstadoRenderer extends JLabel implements TableCellRenderer {
         public EstadoRenderer() {
             setOpaque(true);
             setHorizontalAlignment(CENTER);

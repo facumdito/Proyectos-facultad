@@ -51,13 +51,12 @@ public class IndicadorManager {
         }
     }
 
-    public boolean eliminarIndicador(String id) {
+    public void eliminarIndicador(String id) {
         boolean eliminado = indicadores.removeIf(i -> i.getId().equals(id));
         if (eliminado) {
             guardarCambios();
             System.out.println("Indicador eliminado: " + id);
         }
-        return eliminado;
     }
 
     // Búsquedas y filtros
@@ -173,8 +172,7 @@ public class IndicadorManager {
         if (indicador.getNombre() == null || indicador.getNombre().trim().isEmpty()) return false;
         if (indicador.getTipo() == null) return false;
         if (indicador.getValorObjetivo() < 0) return false;
-        if (indicador.getProcesoId() == null || indicador.getProcesoId().trim().isEmpty()) return false;
-        return true;
+        return indicador.getProcesoId() != null && !indicador.getProcesoId().trim().isEmpty();
     }
 
     // Reportes

@@ -48,7 +48,8 @@ public class DatabaseHelper {
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
-            String linea = reader.readLine(); // Saltar encabezados
+            reader.readLine();
+            String linea; // Saltar encabezados
 
             while ((linea = reader.readLine()) != null) {
                 String[] datos = linea.split(SEPARADOR);
@@ -65,9 +66,7 @@ public class DatabaseHelper {
                         );
 
                         // Configurar fecha y estado
-                        if (datos.length > 7) {
-                            proceso.setFechaCreacion(LocalDate.parse(datos[7].trim(), FORMATO_FECHA));
-                        }
+                        proceso.setFechaCreacion(LocalDate.parse(datos[7].trim(), FORMATO_FECHA));
                         if (datos.length > 8) {
                             proceso.setActivo(Boolean.parseBoolean(datos[8].trim()));
                         }
@@ -120,7 +119,8 @@ public class DatabaseHelper {
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
-            String linea = reader.readLine(); // Saltar encabezados
+            reader.readLine();
+            String linea; // Saltar encabezados
 
             while ((linea = reader.readLine()) != null) {
                 String[] datos = linea.split(SEPARADOR);
@@ -187,7 +187,8 @@ public class DatabaseHelper {
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
-            String linea = reader.readLine(); // Saltar encabezados
+            reader.readLine();
+            String linea; // Saltar encabezados
 
             while ((linea = reader.readLine()) != null) {
                 String[] datos = linea.split(SEPARADOR);

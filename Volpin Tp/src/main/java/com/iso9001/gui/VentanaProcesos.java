@@ -13,8 +13,8 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class VentanaProcesos extends JFrame {
-    private ProcesoManager procesoManager;
-    private IndicadorManager indicadorManager;
+    private final ProcesoManager procesoManager;
+    private final IndicadorManager indicadorManager;
 
     private JTable tablaProcesos;
     private DefaultTableModel modeloTabla;
@@ -65,7 +65,7 @@ public class VentanaProcesos extends JFrame {
 
         panel.add(new JLabel("Buscar:"));
         txtBuscar = new JTextField(20);
-        txtBuscar.addActionListener(e -> filtrarProcesos());
+        txtBuscar.addActionListener(_ -> filtrarProcesos());
         panel.add(txtBuscar);
 
         panel.add(new JLabel("Tipo:"));
@@ -74,15 +74,15 @@ public class VentanaProcesos extends JFrame {
         for (TipoProceso tipo : TipoProceso.values()) {
             comboTipo.addItem(tipo);
         }
-        comboTipo.addActionListener(e -> filtrarProcesos());
+        comboTipo.addActionListener(_ -> filtrarProcesos());
         panel.add(comboTipo);
 
         JButton btnBuscar = new JButton("Buscar");
-        btnBuscar.addActionListener(e -> filtrarProcesos());
+        btnBuscar.addActionListener(_ -> filtrarProcesos());
         panel.add(btnBuscar);
 
         JButton btnLimpiar = new JButton("Limpiar");
-        btnLimpiar.addActionListener(e -> limpiarFiltros());
+        btnLimpiar.addActionListener(_ -> limpiarFiltros());
         panel.add(btnLimpiar);
 
         return panel;
@@ -146,19 +146,19 @@ public class VentanaProcesos extends JFrame {
         JPanel panel = new JPanel(new FlowLayout());
 
         JButton btnNuevo = new JButton("Nuevo Proceso");
-        btnNuevo.addActionListener(e -> mostrarFormularioNuevoProceso());
+        btnNuevo.addActionListener(_ -> mostrarFormularioNuevoProceso());
 
         JButton btnEditar = new JButton("Editar");
-        btnEditar.addActionListener(e -> editarProcesoSeleccionado());
+        btnEditar.addActionListener(_ -> editarProcesoSeleccionado());
 
         JButton btnEliminar = new JButton("Desactivar");
-        btnEliminar.addActionListener(e -> desactivarProcesoSeleccionado());
+        btnEliminar.addActionListener(_ -> desactivarProcesoSeleccionado());
 
         JButton btnReporte = new JButton("Generar Reporte");
-        btnReporte.addActionListener(e -> generarReporteProcesos());
+        btnReporte.addActionListener(_ -> generarReporteProcesos());
 
         JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> dispose());
+        btnCerrar.addActionListener(_ -> dispose());
 
         panel.add(btnNuevo);
         panel.add(btnEditar);
@@ -333,7 +333,7 @@ public class VentanaProcesos extends JFrame {
         JButton btnGuardar = new JButton("Guardar");
         JButton btnCancelar = new JButton("Cancelar");
 
-        btnGuardar.addActionListener(e -> {
+        btnGuardar.addActionListener(_ -> {
             if (validarFormulario(txtId, txtNombre, txtResponsable)) {
                 Proceso nuevoProceso = new Proceso(
                         txtId.getText().trim(),
@@ -352,7 +352,7 @@ public class VentanaProcesos extends JFrame {
             }
         });
 
-        btnCancelar.addActionListener(e -> dialogo.dispose());
+        btnCancelar.addActionListener(_ -> dialogo.dispose());
 
         panelBotones.add(btnGuardar);
         panelBotones.add(btnCancelar);
@@ -441,7 +441,7 @@ public class VentanaProcesos extends JFrame {
 
         JPanel panelBotones = new JPanel(new FlowLayout());
         JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> dialogoReporte.dispose());
+        btnCerrar.addActionListener(_ -> dialogoReporte.dispose());
         panelBotones.add(btnCerrar);
 
         dialogoReporte.add(panelBotones, BorderLayout.SOUTH);
