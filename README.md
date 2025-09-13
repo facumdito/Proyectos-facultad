@@ -309,6 +309,7 @@ PUT /api/auditorias/{id}/completar # Completar auditoría
 **Proyecto Académico** - Universidad Católica Argentina de Rosario  
 **Materia**: Programación Orientada a Datos  
 **Estudiante**: Chera Franco | Longo Tomás | Santini Facundo | Vendel Tomás
+
 **Profesor**: Juan Pablo Volpintesta  
 **Fecha**: Septiembre 2025
 
