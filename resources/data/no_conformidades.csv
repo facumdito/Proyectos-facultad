@@ -1,4 +1,4 @@
 id,titulo,descripcion,estado,prioridad,fechaDeteccion,procesoAfectado,responsableDeteccion,causaRaiz
 NC001,Documento obsoleto en producción,"Se encontró un procedimiento desactualizado en el área de producción",ABIERTA,MEDIA,2025-09-12,P004,Auditor Interno,""
-NC002,Falta de calibración equipos,"Equipos de medición sin calibración vigente",ABIERTA,ALTA,2025-09-12,P004,Técnico Calidad,""
-NC003,Capacitación no documentada,"Personal sin evidencia de capacitación en ISO 9001",ABIERTA,BAJA,2025-09-12,P006,Jefe RRHH,""
+NC002,Falta de calibración equipos,"Equipos de medición sin calibración vigente",EN_CORRECCION,ALTA,2025-09-12,P004,Técnico Calidad,""
+NC003,Capacitación no documentada,"Personal sin evidencia de capacitación en ISO 9001",CERRADA,BAJA,2025-09-12,P006,Jefe RRHH,""

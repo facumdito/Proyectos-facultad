@@ -1,6 +1,2 @@
 id,nombre,descripcion,tipo,unidadMedida,valorObjetivo,valorActual,procesoId,fechaUltimaMedicion
-I001,Cumplimiento Objetivos Estratégicos,"Porcentaje de objetivos cumplidos",EFICACIA,%,90,00,93,15,P001,2025-09-12
-I002,Satisfacción del Cliente,"Nivel de satisfacción general",SATISFACCION,puntos,4,50,4,62,P005,2025-09-12
-I003,Tiempo Desarrollo Productos,"Tiempo promedio de desarrollo",TIEMPO,días,120,00,133,35,P003,2025-09-12
-I004,Eficiencia Producción,"Productos por hora",EFICIENCIA,unid/h,50,00,50,15,P004,2025-09-12
-I005,Defectos por Millón,"Cantidad de defectos por millón",CALIDAD,ppm,100,00,100,74,P004,2025-09-12
+1,1,"1",EFICIENCIA,1,1,00,1,00,1,2025-09-30
