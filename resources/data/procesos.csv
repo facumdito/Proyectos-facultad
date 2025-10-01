@@ -4,5 +4,5 @@ P002,Gestión de Calidad,"Proceso de gestión del sistema de calidad",ESTRATEGIC
 P003,Desarrollo de Productos,"Proceso de creación y desarrollo de nuevos productos",OPERATIVO,Jefe Ingeniería,"Desarrollar productos de calidad","Área de I+D",2025-09-12,true
 P004,Producción,"Proceso de fabricación de productos",OPERATIVO,Jefe Producción,"Fabricar productos según especificaciones","Planta de producción",2025-09-12,true
 P005,Ventas y Marketing,"Proceso de comercialización y ventas",OPERATIVO,Gerente Comercial,"Aumentar ventas y satisfacción del cliente","Área comercial",2025-09-12,true
-P006,Gestión de Recursos Humanos,"Proceso de gestión del personal",APOYO,Jefe RRHH,"Gestionar el talento humano","Toda la organización",2025-09-12,true
-P007,Compras y Abastecimiento,"Proceso de adquisición de materiales",APOYO,Jefe Compras,"Asegurar suministro de calidad","Área de compras",2025-09-12,true
+P006,Gestión de Recursos Humanos,"Proceso de gestión del personal",ESTRATEGICO,Jefe RRHH,"Gestionar el talento humano","Toda la organización",2025-09-12,true
+P007,Compras y Abastecimiento,"Proceso de adquisición de materiales",APOYO,Jefe Compras,"Asegurar suministro de calidad","Área de compras",2025-09-12,false
