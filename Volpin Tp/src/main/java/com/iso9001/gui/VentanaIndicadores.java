@@ -24,10 +24,11 @@ public class VentanaIndicadores extends JFrame {
 
     public VentanaIndicadores(IndicadorManager indicadorManager) {
         this.indicadorManager = indicadorManager;
-        // NO llamar configurarVentana aquí - se llamará desde el Dashboard
+        configurarVentana();
+        crearComponentes();
+        cargarDatos();
     }
 
-    // Método público para configurar la ventana
     public void configurarVentana() {
         setTitle("Gestión de Indicadores de Calidad");
         setSize(1200, 800);
@@ -35,19 +36,13 @@ public class VentanaIndicadores extends JFrame {
         setLayout(new BorderLayout());
     }
 
-    // Método público para crear componentes
     public void crearComponentes() {
-        // Panel superior - Filtros
         JPanel panelFiltros = crearPanelFiltros();
         add(panelFiltros, BorderLayout.NORTH);
 
-        // Panel central dividido
         JSplitPane splitPrincipal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-
-        // Panel izquierdo - Tabla
         JPanel panelTabla = crearPanelTabla();
 
-        // Panel derecho dividido - Detalles y gráficos
         JSplitPane splitDerecho = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         JPanel panelDetalles = crearPanelDetalles();
         panelGraficos = crearPanelGraficos();
@@ -62,12 +57,10 @@ public class VentanaIndicadores extends JFrame {
 
         add(splitPrincipal, BorderLayout.CENTER);
 
-        // Panel inferior - Botones
         JPanel panelBotones = crearPanelBotones();
         add(panelBotones, BorderLayout.SOUTH);
     }
 
-    // Método público para cargar datos
     public void cargarDatos() {
         try {
             modeloTabla.setRowCount(0);
@@ -99,16 +92,16 @@ public class VentanaIndicadores extends JFrame {
 
         panel.add(new JLabel("Buscar:"));
         txtBuscar = new JTextField(20);
-        txtBuscar.addActionListener(e -> filtrarIndicadores());
+        txtBuscar.addActionListener(_ -> filtrarIndicadores());
         panel.add(txtBuscar);
 
         panel.add(new JLabel("Tipo:"));
         comboTipo = new JComboBox<>();
-        comboTipo.addItem(null); // Opción "Todos"
+        comboTipo.addItem(null);
         for (TipoIndicador tipo : TipoIndicador.values()) {
             comboTipo.addItem(tipo);
         }
-        comboTipo.addActionListener(e -> filtrarIndicadores());
+        comboTipo.addActionListener(_ -> filtrarIndicadores());
         panel.add(comboTipo);
 
         panel.add(new JLabel("Estado:"));
@@ -117,15 +110,15 @@ public class VentanaIndicadores extends JFrame {
         comboEstado.addItem("VERDE");
         comboEstado.addItem("AMARILLO");
         comboEstado.addItem("ROJO");
-        comboEstado.addActionListener(e -> filtrarIndicadores());
+        comboEstado.addActionListener(_ -> filtrarIndicadores());
         panel.add(comboEstado);
 
         JButton btnFiltrar = new JButton("Filtrar");
-        btnFiltrar.addActionListener(e -> filtrarIndicadores());
+        btnFiltrar.addActionListener(_ -> filtrarIndicadores());
         panel.add(btnFiltrar);
 
         JButton btnLimpiar = new JButton("Limpiar");
-        btnLimpiar.addActionListener(e -> limpiarFiltros());
+        btnLimpiar.addActionListener(_ -> limpiarFiltros());
         panel.add(btnLimpiar);
 
         return panel;
@@ -135,7 +128,6 @@ public class VentanaIndicadores extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Indicadores de Calidad"));
 
-        // Crear modelo de tabla
         String[] columnas = {"ID", "Nombre", "Tipo", "Actual", "Objetivo", "Estado", "Tendencia"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
@@ -156,10 +148,8 @@ public class VentanaIndicadores extends JFrame {
             }
         });
 
-        // Configurar renderer para la columna de estado
         tablaIndicadores.getColumnModel().getColumn(5).setCellRenderer(new EstadoRenderer());
 
-        // Configurar anchuras de columnas
         tablaIndicadores.getColumnModel().getColumn(0).setPreferredWidth(80);
         tablaIndicadores.getColumnModel().getColumn(1).setPreferredWidth(200);
         tablaIndicadores.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -193,11 +183,9 @@ public class VentanaIndicadores extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Análisis Visual"));
 
-        // Panel de resumen estadístico
         JPanel panelEstadisticas = new JPanel(new GridLayout(2, 2, 5, 5));
         panelEstadisticas.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Crear tarjetas de estadísticas
         panelEstadisticas.add(crearTarjetaEstadistica("Total", Color.BLUE));
         panelEstadisticas.add(crearTarjetaEstadistica("Verde", new Color(39, 174, 96)));
         panelEstadisticas.add(crearTarjetaEstadistica("Amarillo", new Color(241, 196, 15)));
@@ -231,22 +219,22 @@ public class VentanaIndicadores extends JFrame {
         JPanel panel = new JPanel(new FlowLayout());
 
         JButton btnNuevo = new JButton("Nuevo Indicador");
-        btnNuevo.addActionListener(e -> mostrarFormularioNuevoIndicador());
+        btnNuevo.addActionListener(_ -> mostrarFormularioNuevoIndicador());
 
         JButton btnMedicion = new JButton("Registrar Medición");
-        btnMedicion.addActionListener(e -> registrarMedicionIndicador());
+        btnMedicion.addActionListener(_ -> registrarMedicionIndicador());
 
         JButton btnEditar = new JButton("Editar");
-        btnEditar.addActionListener(e -> editarIndicadorSeleccionado());
+        btnEditar.addActionListener(_ -> editarIndicadorSeleccionado());
 
         JButton btnEliminar = new JButton("Eliminar");
-        btnEliminar.addActionListener(e -> eliminarIndicadorSeleccionado());
+        btnEliminar.addActionListener(_ -> eliminarIndicadorSeleccionado());
 
         JButton btnReporte = new JButton("Generar Reporte");
-        btnReporte.addActionListener(e -> generarReporteIndicadores());
+        btnReporte.addActionListener(_ -> generarReporteIndicadores());
 
         JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> dispose());
+        btnCerrar.addActionListener(_ -> dispose());
 
         panel.add(btnNuevo);
         panel.add(btnMedicion);
@@ -270,17 +258,14 @@ public class VentanaIndicadores extends JFrame {
         for (Indicador indicador : indicadores) {
             boolean coincide = true;
 
-            // Filtrar por búsqueda de texto
             if (!busqueda.isEmpty()) {
                 coincide = indicador.getNombre().toLowerCase().contains(busqueda.toLowerCase());
             }
 
-            // Filtrar por tipo
             if (tipoSeleccionado != null) {
                 coincide = coincide && indicador.getTipo() == tipoSeleccionado;
             }
 
-            // Filtrar por estado
             if (!"TODOS".equals(estadoSeleccionado)) {
                 coincide = coincide && indicador.getEstadoSemaforo().equals(estadoSeleccionado);
             }
@@ -346,7 +331,6 @@ public class VentanaIndicadores extends JFrame {
                 detalles.append(indicador.getDescripcion()).append("\n\n");
             }
 
-            // Historial de valores
             List<Double> historial = indicador.getHistorialValores();
             if (!historial.isEmpty()) {
                 detalles.append("HISTORIAL RECIENTE\n");
@@ -362,7 +346,6 @@ public class VentanaIndicadores extends JFrame {
     }
 
     private void actualizarGraficos() {
-        // Actualizar las tarjetas de estadísticas en el panel de gráficos
         actualizarEstadisticasGenerales();
     }
 
@@ -372,7 +355,6 @@ public class VentanaIndicadores extends JFrame {
             Component[] tarjetas = panelEst.getComponents();
 
             if (tarjetas.length >= 4) {
-                // Actualizar valores
                 ((JLabel) ((JPanel) tarjetas[0]).getComponent(1)).setText(String.valueOf(indicadorManager.getTotalIndicadores()));
                 ((JLabel) ((JPanel) tarjetas[1]).getComponent(1)).setText(String.valueOf(indicadorManager.getIndicadoresVerde()));
                 ((JLabel) ((JPanel) tarjetas[2]).getComponent(1)).setText(String.valueOf(indicadorManager.getIndicadoresAmarillo()));
@@ -382,15 +364,141 @@ public class VentanaIndicadores extends JFrame {
     }
 
     private void mostrarFormularioNuevoIndicador() {
-        JOptionPane.showMessageDialog(this,
-                """
-                        Funcionalidad de creación de indicadores disponible en la versión completa.
-                        Esta ventana permitiría:
-                        - Definir nuevo indicador
-                        - Configurar fórmula de cálculo
-                        - Establecer objetivos y umbrales""",
-                "Nuevo Indicador",
-                JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialogo = new JDialog(this, "Nuevo Indicador", true);
+        dialogo.setSize(600, 550);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setLayout(new BorderLayout());
+
+        JPanel panelForm = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JTextField txtId = new JTextField(20);
+        JTextField txtNombre = new JTextField(30);
+        JTextArea txtDescripcion = new JTextArea(3, 30);
+        JComboBox<TipoIndicador> cmbTipo = new JComboBox<>(TipoIndicador.values());
+        JTextField txtUnidad = new JTextField(15);
+        JTextField txtProceso = new JTextField(20);
+        JTextField txtObjetivo = new JTextField(10);
+
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelForm.add(new JLabel("ID:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtId, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelForm.add(new JLabel("Nombre:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtNombre, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        panelForm.add(new JLabel("Descripción:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(new JScrollPane(txtDescripcion), gbc);
+
+        gbc.gridx = 0; gbc.gridy = 3;
+        panelForm.add(new JLabel("Tipo:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(cmbTipo, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 4;
+        panelForm.add(new JLabel("Unidad de Medida:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtUnidad, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 5;
+        panelForm.add(new JLabel("Proceso ID:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtProceso, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 6;
+        panelForm.add(new JLabel("Valor Objetivo:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtObjetivo, gbc);
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        JButton btnGuardar = new JButton("Guardar");
+        JButton btnCancelar = new JButton("Cancelar");
+
+        btnGuardar.addActionListener(_ -> {
+            if (validarFormularioIndicador(txtId, txtNombre, txtUnidad, txtProceso, txtObjetivo)) {
+                try {
+                    String id = txtId.getText().trim();
+                    String nombre = txtNombre.getText().trim();
+                    String descripcion = txtDescripcion.getText().trim();
+                    TipoIndicador tipo = (TipoIndicador) cmbTipo.getSelectedItem();
+                    String unidad = txtUnidad.getText().trim();
+                    String proceso = txtProceso.getText().trim();
+                    double objetivo = Double.parseDouble(txtObjetivo.getText().trim());
+
+                    Indicador nuevoIndicador = new Indicador(id, nombre, descripcion, tipo, unidad, proceso, objetivo);
+
+                    indicadorManager.agregarIndicador(nuevoIndicador);
+                    cargarDatos();
+                    dialogo.dispose();
+
+                    JOptionPane.showMessageDialog(this, "Indicador creado exitosamente",
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(dialogo, "El valor objetivo debe ser numérico",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        btnCancelar.addActionListener(_ -> dialogo.dispose());
+
+        panelBotones.add(btnGuardar);
+        panelBotones.add(btnCancelar);
+
+        dialogo.add(new JScrollPane(panelForm), BorderLayout.CENTER);
+        dialogo.add(panelBotones, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
+    private boolean validarFormularioIndicador(JTextField txtId, JTextField txtNombre,
+                                               JTextField txtUnidad, JTextField txtProceso, JTextField txtObjetivo) {
+        if (txtId.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El ID es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (indicadorManager.obtenerIndicador(txtId.getText().trim()) != null) {
+            JOptionPane.showMessageDialog(this, "Ya existe un indicador con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtNombre.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtUnidad.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La unidad de medida es obligatoria", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtProceso.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El proceso es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtObjetivo.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El valor objetivo es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try {
+            Double.parseDouble(txtObjetivo.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El valor objetivo debe ser numérico", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
 
     private void registrarMedicionIndicador() {
@@ -436,9 +544,77 @@ public class VentanaIndicadores extends JFrame {
             return;
         }
 
-        JOptionPane.showMessageDialog(this,
-                "Funcionalidad de edición disponible en la versión completa.",
-                "Información", JOptionPane.INFORMATION_MESSAGE);
+        String indicadorId = (String) modeloTabla.getValueAt(filaSeleccionada, 0);
+        Indicador indicador = indicadorManager.obtenerIndicador(indicadorId);
+
+        if (indicador == null) return;
+
+        JDialog dialogo = new JDialog(this, "Editar Indicador", true);
+        dialogo.setSize(600, 500);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setLayout(new BorderLayout());
+
+        JPanel panelForm = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JTextField txtNombre = new JTextField(indicador.getNombre(), 30);
+        JTextArea txtDescripcion = new JTextArea(indicador.getDescripcion(), 3, 30);
+        JTextField txtObjetivo = new JTextField(String.valueOf(indicador.getValorObjetivo()), 10);
+
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelForm.add(new JLabel("Nombre:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtNombre, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelForm.add(new JLabel("Descripción:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(new JScrollPane(txtDescripcion), gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        panelForm.add(new JLabel("Valor Objetivo:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtObjetivo, gbc);
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        JButton btnGuardar = new JButton("Guardar");
+        JButton btnCancelar = new JButton("Cancelar");
+
+        btnGuardar.addActionListener(_ -> {
+            if (!txtNombre.getText().trim().isEmpty() && !txtObjetivo.getText().trim().isEmpty()) {
+                try {
+                    indicador.setNombre(txtNombre.getText().trim());
+                    indicador.setDescripcion(txtDescripcion.getText().trim());
+                    indicador.setValorObjetivo(Double.parseDouble(txtObjetivo.getText().trim()));
+
+                    cargarDatos();
+                    mostrarDetallesIndicador();
+                    dialogo.dispose();
+
+                    JOptionPane.showMessageDialog(this, "Indicador actualizado exitosamente",
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(dialogo, "El valor objetivo debe ser numérico",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(dialogo, "Complete todos los campos obligatorios",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        btnCancelar.addActionListener(_ -> dialogo.dispose());
+
+        panelBotones.add(btnGuardar);
+        panelBotones.add(btnCancelar);
+
+        dialogo.add(new JScrollPane(panelForm), BorderLayout.CENTER);
+        dialogo.add(panelBotones, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
     }
 
     private void eliminarIndicadorSeleccionado() {
@@ -482,14 +658,13 @@ public class VentanaIndicadores extends JFrame {
 
         JPanel panelBotones = new JPanel(new FlowLayout());
         JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> dialogoReporte.dispose());
+        btnCerrar.addActionListener(_ -> dialogoReporte.dispose());
         panelBotones.add(btnCerrar);
 
         dialogoReporte.add(panelBotones, BorderLayout.SOUTH);
         dialogoReporte.setVisible(true);
     }
 
-    // Renderer personalizado para la columna de estado
     private static class EstadoRenderer extends JLabel implements TableCellRenderer {
         public EstadoRenderer() {
             setOpaque(true);

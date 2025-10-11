@@ -7,7 +7,7 @@ import java.util.List;
 public class Auditoria {
     private String id;
     private String titulo;
-    private String tipo; // "Interna" o "Externa"
+    private String tipo;
     private LocalDate fechaProgramada;
     private LocalDate fechaRealizada;
     private String auditorLider;
@@ -23,7 +23,6 @@ public class Auditoria {
     private boolean completada;
     private String observaciones;
 
-    // Constructor
     public Auditoria(String id, String titulo, String tipo, LocalDate fechaProgramada, String auditorLider) {
         this.id = id;
         this.titulo = titulo;
@@ -37,7 +36,6 @@ public class Auditoria {
         this.completada = false;
     }
 
-    // Métodos de negocio
     public void agregarAuditor(String auditor) {
         if (!auditores.contains(auditor)) {
             auditores.add(auditor);
@@ -86,7 +84,6 @@ public class Auditoria {
         return hallazgos.size();
     }
 
-    // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

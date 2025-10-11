@@ -22,7 +22,6 @@ public class ProcesoManager {
         this.indicadorManager = indicadorManager;
     }
 
-    // Operaciones CRUD
     public void agregarProceso(Proceso proceso) {
         if (proceso != null && !existeProceso(proceso.getId())) {
             procesos.add(proceso);
@@ -65,19 +64,15 @@ public class ProcesoManager {
         }
     }
 
-    public boolean eliminarProceso(String id) {
+    public void eliminarProceso(String id) {
         Proceso proceso = obtenerProceso(id);
         if (proceso != null) {
-            // En lugar de eliminar, desactivar
             proceso.setActivo(false);
             actualizarProceso(proceso);
             System.out.println("Proceso desactivado: " + proceso.getNombre());
-            return true;
         }
-        return false;
     }
 
-    // Búsquedas y filtros
     public List<Proceso> buscarPorNombre(String nombre) {
         return procesos.stream()
                 .filter(p -> p.getNombre().toLowerCase().contains(nombre.toLowerCase()))
@@ -96,7 +91,6 @@ public class ProcesoManager {
                 .collect(Collectors.toList());
     }
 
-    // Análisis y métricas
     public Map<TipoProceso, Long> obtenerEstadisticasPorTipo() {
         return procesos.stream()
                 .filter(Proceso::isActivo)
@@ -130,7 +124,6 @@ public class ProcesoManager {
                 .collect(Collectors.toList());
     }
 
-    // Validaciones
     public boolean existeProceso(String id) {
         return procesos.stream().anyMatch(p -> p.getId().equals(id));
     }
@@ -143,7 +136,6 @@ public class ProcesoManager {
         return proceso.getResponsable() != null && !proceso.getResponsable().trim().isEmpty();
     }
 
-    // Reportes
     public String generarReporteProcesos() {
         StringBuilder reporte = new StringBuilder();
         reporte.append("REPORTE DE PROCESOS\n");
@@ -161,7 +153,6 @@ public class ProcesoManager {
         return reporte.toString();
     }
 
-    // Métodos de persistencia
     private void cargarProcesos() {
         this.procesos = DatabaseHelper.cargarProcesos();
         System.out.println("Procesos cargados: " + procesos.size());
@@ -171,7 +162,6 @@ public class ProcesoManager {
         DatabaseHelper.guardarProcesos(procesos);
     }
 
-    // Getters
     public int getTotalProcesos() {
         return procesos.size();
     }

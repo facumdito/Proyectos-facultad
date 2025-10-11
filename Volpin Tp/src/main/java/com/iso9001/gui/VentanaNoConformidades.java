@@ -41,17 +41,12 @@ public class VentanaNoConformidades extends JFrame {
     }
 
     private void crearComponentes() {
-        // Panel superior - Filtros
         JPanel panelFiltros = crearPanelFiltros();
         add(panelFiltros, BorderLayout.NORTH);
 
-        // Panel central dividido
         JSplitPane splitPrincipal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-
-        // Panel izquierdo - Tabla
         JPanel panelTabla = crearPanelTabla();
 
-        // Panel derecho dividido - Detalles y estadísticas
         JSplitPane splitDerecho = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         JPanel panelDetalles = crearPanelDetalles();
         panelEstadisticas = crearPanelEstadisticas();
@@ -66,7 +61,6 @@ public class VentanaNoConformidades extends JFrame {
 
         add(splitPrincipal, BorderLayout.CENTER);
 
-        // Panel inferior - Botones
         JPanel panelBotones = crearPanelBotones();
         add(panelBotones, BorderLayout.SOUTH);
     }
@@ -77,33 +71,33 @@ public class VentanaNoConformidades extends JFrame {
 
         panel.add(new JLabel("Buscar:"));
         txtBuscar = new JTextField(20);
-        txtBuscar.addActionListener(e -> filtrarNoConformidades());
+        txtBuscar.addActionListener(_ -> filtrarNoConformidades());
         panel.add(txtBuscar);
 
         panel.add(new JLabel("Estado:"));
         comboEstado = new JComboBox<>();
-        comboEstado.addItem(null); // Opción "Todos"
+        comboEstado.addItem(null);
         for (EstadoNoConformidad estado : EstadoNoConformidad.values()) {
             comboEstado.addItem(estado);
         }
-        comboEstado.addActionListener(e -> filtrarNoConformidades());
+        comboEstado.addActionListener(_ -> filtrarNoConformidades());
         panel.add(comboEstado);
 
         panel.add(new JLabel("Prioridad:"));
         comboPrioridad = new JComboBox<>();
-        comboPrioridad.addItem(null); // Opción "Todas"
+        comboPrioridad.addItem(null);
         for (Prioridad prioridad : Prioridad.values()) {
             comboPrioridad.addItem(prioridad);
         }
-        comboPrioridad.addActionListener(e -> filtrarNoConformidades());
+        comboPrioridad.addActionListener(_ -> filtrarNoConformidades());
         panel.add(comboPrioridad);
 
         JButton btnFiltrar = new JButton("Filtrar");
-        btnFiltrar.addActionListener(e -> filtrarNoConformidades());
+        btnFiltrar.addActionListener(_ -> filtrarNoConformidades());
         panel.add(btnFiltrar);
 
         JButton btnLimpiar = new JButton("Limpiar");
-        btnLimpiar.addActionListener(e -> limpiarFiltros());
+        btnLimpiar.addActionListener(_ -> limpiarFiltros());
         panel.add(btnLimpiar);
 
         return panel;
@@ -113,7 +107,6 @@ public class VentanaNoConformidades extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("No Conformidades"));
 
-        // Crear modelo de tabla
         String[] columnas = {"ID", "Título", "Estado", "Prioridad", "Proceso", "Responsable", "Días Restantes"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
@@ -133,12 +126,10 @@ public class VentanaNoConformidades extends JFrame {
             }
         });
 
-        // Configurar renderers
         tablaNoConformidades.getColumnModel().getColumn(2).setCellRenderer(new EstadoRenderer());
         tablaNoConformidades.getColumnModel().getColumn(3).setCellRenderer(new PrioridadRenderer());
         tablaNoConformidades.getColumnModel().getColumn(6).setCellRenderer(new DiasRenderer());
 
-        // Configurar anchuras de columnas
         tablaNoConformidades.getColumnModel().getColumn(0).setPreferredWidth(80);
         tablaNoConformidades.getColumnModel().getColumn(1).setPreferredWidth(200);
         tablaNoConformidades.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -172,13 +163,11 @@ public class VentanaNoConformidades extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Estadísticas"));
 
-        // Panel de resumen estadístico
         JPanel panelStats = new JPanel(new GridLayout(2, 2, 5, 5));
         panelStats.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Crear tarjetas de estadísticas
         panelStats.add(crearTarjetaEstadistica("Total", Color.BLUE));
-        panelStats.add(crearTarjetaEstadistica("Abiertas", new Color(231, 76, 60)));
+        panelStats.add(crearTarjetaEstadistica("Abiertas", new Color(128, 60, 231)));
         panelStats.add(crearTarjetaEstadistica("Cerradas", new Color(39, 174, 96)));
         panelStats.add(crearTarjetaEstadistica("Vencidas", new Color(192, 57, 43)));
 
@@ -210,22 +199,22 @@ public class VentanaNoConformidades extends JFrame {
         JPanel panel = new JPanel(new FlowLayout());
 
         JButton btnNueva = new JButton("Nueva No Conformidad");
-        btnNueva.addActionListener(e -> mostrarFormularioNuevaNC());
+        btnNueva.addActionListener(_ -> mostrarFormularioNuevaNC());
 
         JButton btnAcciones = new JButton("Gestionar Acciones");
-        btnAcciones.addActionListener(e -> gestionarAccionesCorrectivas());
+        btnAcciones.addActionListener(_ -> gestionarAccionesCorrectivas());
 
         JButton btnCambiarEstado = new JButton("Cambiar Estado");
-        btnCambiarEstado.addActionListener(e -> cambiarEstadoNC());
+        btnCambiarEstado.addActionListener(_ -> cambiarEstadoNC());
 
         JButton btnCerrar = new JButton("Cerrar NC");
-        btnCerrar.addActionListener(e -> cerrarNoConformidad());
+        btnCerrar.addActionListener(_ -> cerrarNoConformidad());
 
         JButton btnReporte = new JButton("Generar Reporte");
-        btnReporte.addActionListener(e -> generarReporteNC());
+        btnReporte.addActionListener(_ -> generarReporteNC());
 
         JButton btnSalir = new JButton("Cerrar Ventana");
-        btnSalir.addActionListener(e -> dispose());
+        btnSalir.addActionListener(_ -> dispose());
 
         panel.add(btnNueva);
         panel.add(btnAcciones);
@@ -270,18 +259,15 @@ public class VentanaNoConformidades extends JFrame {
         for (NoConformidad nc : noConformidades) {
             boolean coincide = true;
 
-            // Filtrar por búsqueda de texto
             if (!busqueda.isEmpty()) {
                 coincide = nc.getTitulo().toLowerCase().contains(busqueda.toLowerCase()) ||
                         nc.getDescripcion().toLowerCase().contains(busqueda.toLowerCase());
             }
 
-            // Filtrar por estado
             if (estadoSeleccionado != null) {
                 coincide = coincide && nc.getEstado() == estadoSeleccionado;
             }
 
-            // Filtrar por prioridad
             if (prioridadSeleccionada != null) {
                 coincide = coincide && nc.getPrioridad() == prioridadSeleccionada;
             }
@@ -353,7 +339,6 @@ public class VentanaNoConformidades extends JFrame {
                 detalles.append(nc.getCausaRaiz()).append("\n\n");
             }
 
-            // Acciones correctivas
             List<AccionCorrectiva> acciones = nc.getAccionesCorrectivas();
             if (!acciones.isEmpty()) {
                 detalles.append("ACCIONES CORRECTIVAS\n");
@@ -382,7 +367,6 @@ public class VentanaNoConformidades extends JFrame {
             Component[] tarjetas = panelEst.getComponents();
 
             if (tarjetas.length >= 4) {
-                // Actualizar valores
                 ((JLabel) ((JPanel) tarjetas[0]).getComponent(1)).setText(String.valueOf(noConformidadManager.getTotalNoConformidades()));
                 ((JLabel) ((JPanel) tarjetas[1]).getComponent(1)).setText(String.valueOf(noConformidadManager.getNoConformidadesAbiertas()));
                 ((JLabel) ((JPanel) tarjetas[2]).getComponent(1)).setText(String.valueOf(noConformidadManager.getNoConformidadesCerradas()));
@@ -392,14 +376,135 @@ public class VentanaNoConformidades extends JFrame {
     }
 
     private void mostrarFormularioNuevaNC() {
-        JOptionPane.showMessageDialog(this,
-                "Funcionalidad de creación de no conformidades disponible en la versión completa.\n\n" +
-                        "Esta ventana permitiría:\n" +
-                        "- Definir nueva no conformidad\n" +
-                        "- Asignar responsables\n" +
-                        "- Establecer prioridad y fechas límite",
-                "Nueva No Conformidad",
-                JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialogo = new JDialog(this, "Nueva No Conformidad", true);
+        dialogo.setSize(600, 500);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setLayout(new BorderLayout());
+
+        JPanel panelForm = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JTextField txtId = new JTextField(20);
+        JTextField txtTitulo = new JTextField(30);
+        JTextArea txtDescripcion = new JTextArea(4, 30);
+        JTextField txtProceso = new JTextField(25);
+        JTextField txtResponsable = new JTextField(25);
+        JComboBox<Prioridad> cmbPrioridad = new JComboBox<>(Prioridad.values());
+        JSpinner spinnerDias = new JSpinner(new SpinnerNumberModel(30, 1, 365, 1));
+
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelForm.add(new JLabel("ID:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtId, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelForm.add(new JLabel("Título:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtTitulo, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        panelForm.add(new JLabel("Descripción:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(new JScrollPane(txtDescripcion), gbc);
+
+        gbc.gridx = 0; gbc.gridy = 3;
+        panelForm.add(new JLabel("Proceso Afectado:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtProceso, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 4;
+        panelForm.add(new JLabel("Responsable:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtResponsable, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 5;
+        panelForm.add(new JLabel("Prioridad:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(cmbPrioridad, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 6;
+        panelForm.add(new JLabel("Días para corrección:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(spinnerDias, gbc);
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        JButton btnGuardar = new JButton("Guardar");
+        JButton btnCancelar = new JButton("Cancelar");
+
+        btnGuardar.addActionListener(_ -> {
+            if (validarFormularioNC(txtId, txtTitulo, txtDescripcion, txtProceso, txtResponsable)) {
+                String id = txtId.getText().trim();
+                String titulo = txtTitulo.getText().trim();
+                String descripcion = txtDescripcion.getText().trim();
+                String proceso = txtProceso.getText().trim();
+                String responsable = txtResponsable.getText().trim();
+                Prioridad prioridad = (Prioridad) cmbPrioridad.getSelectedItem();
+                int diasLimite = (Integer) spinnerDias.getValue();
+
+                LocalDate fechaDeteccion = LocalDate.now();
+                LocalDate fechaLimite = fechaDeteccion.plusDays(diasLimite);
+
+                NoConformidad nuevaNC = new NoConformidad(
+                        id, titulo, descripcion, fechaDeteccion, fechaLimite,
+                        proceso, responsable, prioridad
+                );
+
+                noConformidadManager.agregarNoConformidad(nuevaNC);
+                cargarDatos();
+                dialogo.dispose();
+
+                JOptionPane.showMessageDialog(this, "No conformidad creada exitosamente",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        btnCancelar.addActionListener(_ -> dialogo.dispose());
+
+        panelBotones.add(btnGuardar);
+        panelBotones.add(btnCancelar);
+
+        dialogo.add(new JScrollPane(panelForm), BorderLayout.CENTER);
+        dialogo.add(panelBotones, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
+    private boolean validarFormularioNC(JTextField txtId, JTextField txtTitulo, JTextArea txtDescripcion,
+                                        JTextField txtProceso, JTextField txtResponsable) {
+        if (txtId.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El ID es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (noConformidadManager.obtenerNoConformidad(txtId.getText().trim()) != null) {
+            JOptionPane.showMessageDialog(this, "Ya existe una NC con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtTitulo.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El título es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtDescripcion.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La descripción es obligatoria", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtProceso.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El proceso afectado es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtResponsable.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El responsable es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
 
     private void gestionarAccionesCorrectivas() {
@@ -410,11 +515,135 @@ public class VentanaNoConformidades extends JFrame {
             return;
         }
 
-        JOptionPane.showMessageDialog(this,
-                "Gestión de acciones correctivas disponible en la versión completa.",
-                "Acciones Correctivas", JOptionPane.INFORMATION_MESSAGE);
-    }
+        String ncId = (String) modeloTabla.getValueAt(filaSeleccionada, 0);
+        NoConformidad nc = noConformidadManager.obtenerNoConformidad(ncId);
 
+        if (nc == null) return;
+
+        JDialog dialogo = new JDialog(this, "Acciones Correctivas - " + nc.getTitulo(), true);
+        dialogo.setSize(700, 500);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setLayout(new BorderLayout());
+
+        String[] columnas = {"Descripción", "Responsable", "Fecha Límite", "Completada"};
+        DefaultTableModel modeloAcciones = new DefaultTableModel(columnas, 0) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 3 ? Boolean.class : String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 3;
+            }
+        };
+
+        for (AccionCorrectiva accion : nc.getAccionesCorrectivas()) {
+            modeloAcciones.addRow(new Object[]{
+                    accion.getDescripcion(),
+                    accion.getResponsable(),
+                    accion.getFechaLimite(),
+                    accion.isCompletada()
+            });
+        }
+
+        JTable tablaAcciones = new JTable(modeloAcciones);
+        JScrollPane scrollPane = new JScrollPane(tablaAcciones);
+        dialogo.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        JButton btnNueva = new JButton("Nueva Acción");
+        JButton btnEliminar = new JButton("Eliminar");
+        JButton btnGuardar = new JButton("Guardar Cambios");
+        JButton btnCerrar = new JButton("Cerrar");
+
+        btnNueva.addActionListener(_ -> {
+            JTextField txtDescripcion = new JTextField(30);
+            JTextField txtResponsable = new JTextField(20);
+            JSpinner spinnerDias = new JSpinner(new SpinnerNumberModel(30, 1, 365, 1));
+
+            JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));
+            panel.add(new JLabel("Descripción:"));
+            panel.add(txtDescripcion);
+            panel.add(new JLabel("Responsable:"));
+            panel.add(txtResponsable);
+            panel.add(new JLabel("Días para completar:"));
+            panel.add(spinnerDias);
+
+            int result = JOptionPane.showConfirmDialog(dialogo, panel, "Nueva Acción Correctiva",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (result == JOptionPane.OK_OPTION) {
+                if (!txtDescripcion.getText().trim().isEmpty() && !txtResponsable.getText().trim().isEmpty()) {
+                    int dias = (Integer) spinnerDias.getValue();
+                    LocalDate fechaLimite = LocalDate.now().plusDays(dias);
+
+                    AccionCorrectiva nuevaAccion = new AccionCorrectiva(
+                            txtDescripcion.getText().trim(),
+                            txtResponsable.getText().trim(),
+                            fechaLimite
+                    );
+
+                    nc.agregarAccionCorrectiva(nuevaAccion);
+                    modeloAcciones.addRow(new Object[]{
+                            nuevaAccion.getDescripcion(),
+                            nuevaAccion.getResponsable(),
+                            nuevaAccion.getFechaLimite(),
+                            false
+                    });
+                } else {
+                    JOptionPane.showMessageDialog(dialogo, "Complete todos los campos",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        btnEliminar.addActionListener(_ -> {
+            int fila = tablaAcciones.getSelectedRow();
+            if (fila != -1) {
+                int confirm = JOptionPane.showConfirmDialog(dialogo,
+                        "¿Eliminar esta acción correctiva?", "Confirmar",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    List<AccionCorrectiva> acciones = nc.getAccionesCorrectivas();
+                    if (fila < acciones.size()) {
+                        acciones.remove(fila);
+                        modeloAcciones.removeRow(fila);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(dialogo, "Seleccione una acción para eliminar",
+                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        btnGuardar.addActionListener(_ -> {
+            List<AccionCorrectiva> acciones = nc.getAccionesCorrectivas();
+            for (int i = 0; i < modeloAcciones.getRowCount() && i < acciones.size(); i++) {
+                Boolean completada = (Boolean) modeloAcciones.getValueAt(i, 3);
+                if (completada != null && completada) {
+                    acciones.get(i).marcarComoCompletada();
+                }
+            }
+
+            cargarDatos();
+            mostrarDetallesNoConformidad();
+
+            JOptionPane.showMessageDialog(dialogo, "Cambios guardados exitosamente",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        btnCerrar.addActionListener(_ -> dialogo.dispose());
+
+        panelBotones.add(btnNueva);
+        panelBotones.add(btnEliminar);
+        panelBotones.add(btnGuardar);
+        panelBotones.add(btnCerrar);
+
+        dialogo.add(panelBotones, BorderLayout.SOUTH);
+        dialogo.setVisible(true);
+    }
     private void cambiarEstadoNC() {
         int filaSeleccionada = tablaNoConformidades.getSelectedRow();
         if (filaSeleccionada == -1) {
@@ -448,6 +677,19 @@ public class VentanaNoConformidades extends JFrame {
         }
 
         String ncId = (String) modeloTabla.getValueAt(filaSeleccionada, 0);
+        NoConformidad nc = noConformidadManager.obtenerNoConformidad(ncId);
+
+        if (nc == null) return;
+
+        if (!nc.todasAccionesCompletadas() && !nc.getAccionesCorrectivas().isEmpty()) {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "No todas las acciones correctivas están completadas.\n¿Desea cerrar de todas formas?",
+                    "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
 
         String observaciones = JOptionPane.showInputDialog(this,
                 "Ingrese observaciones de cierre:", "Cerrar No Conformidad",
@@ -478,14 +720,13 @@ public class VentanaNoConformidades extends JFrame {
 
         JPanel panelBotones = new JPanel(new FlowLayout());
         JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> dialogoReporte.dispose());
+        btnCerrar.addActionListener(_ -> dialogoReporte.dispose());
         panelBotones.add(btnCerrar);
 
         dialogoReporte.add(panelBotones, BorderLayout.SOUTH);
         dialogoReporte.setVisible(true);
     }
 
-    // Renderers personalizados
     private static class EstadoRenderer extends JLabel implements TableCellRenderer {
         public EstadoRenderer() {
             setOpaque(true);
@@ -544,11 +785,11 @@ public class VentanaNoConformidades extends JFrame {
 
             switch (prioridad) {
                 case CRITICA:
-                    setBackground(new Color(192, 57, 43));
+                    setBackground(new Color(248, 47, 26));
                     setForeground(Color.WHITE);
                     break;
                 case ALTA:
-                    setBackground(new Color(231, 76, 60));
+                    setBackground(new Color(248, 115, 100));
                     setForeground(Color.WHITE);
                     break;
                 case MEDIA:
@@ -586,13 +827,13 @@ public class VentanaNoConformidades extends JFrame {
             setText(dias.toString());
 
             if (dias < 0) {
-                setBackground(new Color(192, 57, 43)); // Rojo - Vencida
+                setBackground(new Color(192, 57, 43));
                 setForeground(Color.WHITE);
             } else if (dias <= 3) {
-                setBackground(new Color(241, 196, 15)); // Amarillo - Próxima a vencer
+                setBackground(new Color(241, 196, 15));
                 setForeground(Color.BLACK);
             } else {
-                setBackground(new Color(39, 174, 96)); // Verde - Tiempo suficiente
+                setBackground(new Color(39, 174, 96));
                 setForeground(Color.WHITE);
             }
 

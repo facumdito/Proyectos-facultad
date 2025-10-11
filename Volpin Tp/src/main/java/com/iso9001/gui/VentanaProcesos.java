@@ -39,22 +39,17 @@ public class VentanaProcesos extends JFrame {
     }
 
     private void crearComponentes() {
-        // Panel superior - Búsqueda y filtros
         JPanel panelBusqueda = crearPanelBusqueda();
         add(panelBusqueda, BorderLayout.NORTH);
 
-        // Panel central - Tabla de procesos
         JPanel panelTabla = crearPanelTabla();
 
-        // Panel derecho - Detalles
         JPanel panelDetalles = crearPanelDetalles();
 
-        // Dividir panel central
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelTabla, panelDetalles);
         splitPane.setDividerLocation(600);
         add(splitPane, BorderLayout.CENTER);
 
-        // Panel inferior - Botones
         JPanel panelBotones = crearPanelBotones();
         add(panelBotones, BorderLayout.SOUTH);
     }
@@ -70,7 +65,7 @@ public class VentanaProcesos extends JFrame {
 
         panel.add(new JLabel("Tipo:"));
         comboTipo = new JComboBox<>();
-        comboTipo.addItem(null); // Opción "Todos"
+        comboTipo.addItem(null);
         for (TipoProceso tipo : TipoProceso.values()) {
             comboTipo.addItem(tipo);
         }
@@ -92,7 +87,6 @@ public class VentanaProcesos extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Lista de Procesos"));
 
-        // Crear modelo de tabla
         String[] columnas = {"ID", "Nombre", "Tipo", "Responsable", "Activo", "Indicadores"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
@@ -112,7 +106,6 @@ public class VentanaProcesos extends JFrame {
             }
         });
 
-        // Configurar columnas
         tablaProcesos.getColumnModel().getColumn(0).setPreferredWidth(80);
         tablaProcesos.getColumnModel().getColumn(1).setPreferredWidth(200);
         tablaProcesos.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -200,13 +193,11 @@ public class VentanaProcesos extends JFrame {
         for (Proceso proceso : procesos) {
             boolean coincide = true;
 
-            // Filtrar por búsqueda de texto
             if (!busqueda.isEmpty()) {
                 coincide = proceso.getNombre().toLowerCase().contains(busqueda.toLowerCase()) ||
                         proceso.getResponsable().toLowerCase().contains(busqueda.toLowerCase());
             }
 
-            // Filtrar por tipo
             if (tipoSeleccionado != null) {
                 coincide = coincide && proceso.getTipo() == tipoSeleccionado;
             }
@@ -266,7 +257,6 @@ public class VentanaProcesos extends JFrame {
                 detalles.append("Descripción:\n").append(proceso.getDescripcion()).append("\n\n");
             }
 
-            // Mostrar indicadores asociados
             List<Indicador> indicadores = indicadorManager.obtenerIndicadoresPorProceso(proceso.getId());
             if (!indicadores.isEmpty()) {
                 detalles.append("INDICADORES ASOCIADOS\n");
@@ -290,7 +280,6 @@ public class VentanaProcesos extends JFrame {
         dialogo.setLocationRelativeTo(this);
         dialogo.setLayout(new BorderLayout());
 
-        // Crear formulario
         JPanel panelForm = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -302,7 +291,6 @@ public class VentanaProcesos extends JFrame {
         JComboBox<TipoProceso> cmbTipo = new JComboBox<>(TipoProceso.values());
         JTextField txtResponsable = new JTextField(25);
 
-        // Añadir campos al formulario
         gbc.gridx = 0; gbc.gridy = 0;
         panelForm.add(new JLabel("ID:"), gbc);
         gbc.gridx = 1;
@@ -328,7 +316,6 @@ public class VentanaProcesos extends JFrame {
         gbc.gridx = 1;
         panelForm.add(txtResponsable, gbc);
 
-        // Botones
         JPanel panelBotones = new JPanel(new FlowLayout());
         JButton btnGuardar = new JButton("Guardar");
         JButton btnCancelar = new JButton("Cancelar");
@@ -395,11 +382,103 @@ public class VentanaProcesos extends JFrame {
             return;
         }
 
-        JOptionPane.showMessageDialog(this,
-                "Funcionalidad de edición disponible en la versión completa.",
-                "Información", JOptionPane.INFORMATION_MESSAGE);
-    }
+        String procesoId = (String) modeloTabla.getValueAt(filaSeleccionada, 0);
+        Proceso proceso = procesoManager.obtenerProceso(procesoId);
 
+        if (proceso == null) return;
+
+        JDialog dialogo = new JDialog(this, "Editar Proceso", true);
+        dialogo.setSize(600, 550);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setLayout(new BorderLayout());
+
+        JPanel panelForm = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JTextField txtNombre = new JTextField(proceso.getNombre(), 30);
+        JTextArea txtDescripcion = new JTextArea(proceso.getDescripcion(), 4, 30);
+        txtDescripcion.setLineWrap(true);
+        txtDescripcion.setWrapStyleWord(true);
+        JTextArea txtObjetivo = new JTextArea(proceso.getObjetivo(), 3, 30);
+        txtObjetivo.setLineWrap(true);
+        txtObjetivo.setWrapStyleWord(true);
+        JTextArea txtAlcance = new JTextArea(proceso.getAlcance(), 3, 30);
+        txtAlcance.setLineWrap(true);
+        txtAlcance.setWrapStyleWord(true);
+        JComboBox<TipoProceso> cmbTipo = new JComboBox<>(TipoProceso.values());
+        cmbTipo.setSelectedItem(proceso.getTipo());
+        JTextField txtResponsable = new JTextField(proceso.getResponsable(), 30);
+
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelForm.add(new JLabel("Nombre:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtNombre, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelForm.add(new JLabel("Descripción:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(new JScrollPane(txtDescripcion), gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        panelForm.add(new JLabel("Objetivo:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(new JScrollPane(txtObjetivo), gbc);
+
+        gbc.gridx = 0; gbc.gridy = 3;
+        panelForm.add(new JLabel("Alcance:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(new JScrollPane(txtAlcance), gbc);
+
+        gbc.gridx = 0; gbc.gridy = 4;
+        panelForm.add(new JLabel("Tipo:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(cmbTipo, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 5;
+        panelForm.add(new JLabel("Responsable:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtResponsable, gbc);
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        JButton btnGuardar = new JButton("Guardar Cambios");
+        JButton btnCancelar = new JButton("Cancelar");
+
+        btnGuardar.addActionListener(_ -> {
+            if (!txtNombre.getText().trim().isEmpty() && !txtResponsable.getText().trim().isEmpty()) {
+                proceso.setNombre(txtNombre.getText().trim());
+                proceso.setDescripcion(txtDescripcion.getText().trim());
+                proceso.setObjetivo(txtObjetivo.getText().trim());
+                proceso.setAlcance(txtAlcance.getText().trim());
+                proceso.setTipo((TipoProceso) cmbTipo.getSelectedItem());
+                proceso.setResponsable(txtResponsable.getText().trim());
+                proceso.actualizarFechaRevision();
+
+                cargarDatos();
+                mostrarDetallesProceso();
+                dialogo.dispose();
+
+                JOptionPane.showMessageDialog(this, "Proceso actualizado exitosamente",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(dialogo,
+                        "El nombre y el responsable son obligatorios",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        btnCancelar.addActionListener(_ -> dialogo.dispose());
+
+        panelBotones.add(btnGuardar);
+        panelBotones.add(btnCancelar);
+
+        dialogo.add(new JScrollPane(panelForm), BorderLayout.CENTER);
+        dialogo.add(panelBotones, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
     private void desactivarProcesoSeleccionado() {
         int filaSeleccionada = tablaProcesos.getSelectedRow();
         if (filaSeleccionada == -1) {

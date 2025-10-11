@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class ReporteGenerator {
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    // Generar reporte de estado general del sistema
     public static String generarReporteEstadoGeneral(List<Proceso> procesos,
                                                      List<Indicador> indicadores,
                                                      List<NoConformidad> noConformidades) {
@@ -22,7 +21,6 @@ public class ReporteGenerator {
         reporte.append("Fecha: ").append(LocalDate.now().format(FORMATO_FECHA)).append("\n");
         reporte.append("=".repeat(60)).append("\n\n");
 
-        // Resumen ejecutivo
         reporte.append("RESUMEN EJECUTIVO\n");
         reporte.append("-".repeat(30)).append("\n");
         reporte.append("Total Procesos: ").append(procesos.size()).append("\n");
@@ -34,7 +32,6 @@ public class ReporteGenerator {
         reporte.append("No Conformidades Abiertas: ").append(contarNoConformidadesPorEstado(noConformidades, EstadoNoConformidad.ABIERTA)).append("\n");
         reporte.append("No Conformidades Cerradas: ").append(contarNoConformidadesPorEstado(noConformidades, EstadoNoConformidad.CERRADA)).append("\n\n");
 
-        // Análisis por tipo de proceso
         reporte.append("ANÁLISIS POR TIPO DE PROCESO\n");
         reporte.append("-".repeat(30)).append("\n");
         for (TipoProceso tipo : TipoProceso.values()) {
@@ -43,7 +40,6 @@ public class ReporteGenerator {
         }
         reporte.append("\n");
 
-        // Top 5 indicadores críticos
         reporte.append("TOP 5 INDICADORES CRÍTICOS\n");
         reporte.append("-".repeat(30)).append("\n");
         indicadores.stream()
@@ -57,7 +53,6 @@ public class ReporteGenerator {
         return reporte.toString();
     }
 
-    // Generar reporte de indicadores
     public static String generarReporteIndicadores(List<Indicador> indicadores) {
         StringBuilder reporte = new StringBuilder();
 
@@ -65,7 +60,6 @@ public class ReporteGenerator {
         reporte.append("=".repeat(50)).append("\n");
         reporte.append("Fecha: ").append(LocalDate.now().format(FORMATO_FECHA)).append("\n\n");
 
-        // Agrupar por tipo
         Map<TipoIndicador, List<Indicador>> indicadoresPorTipo = indicadores.stream()
                 .collect(Collectors.groupingBy(Indicador::getTipo));
 
@@ -87,7 +81,6 @@ public class ReporteGenerator {
         return reporte.toString();
     }
 
-    // Generar reporte de no conformidades
     public static String generarReporteNoConformidades(List<NoConformidad> noConformidades) {
         StringBuilder reporte = new StringBuilder();
 
@@ -95,7 +88,6 @@ public class ReporteGenerator {
         reporte.append("=".repeat(40)).append("\n");
         reporte.append("Fecha: ").append(LocalDate.now().format(FORMATO_FECHA)).append("\n\n");
 
-        // Estadísticas generales
         reporte.append("ESTADÍSTICAS GENERALES\n");
         reporte.append("-".repeat(25)).append("\n");
         for (EstadoNoConformidad estado : EstadoNoConformidad.values()) {
@@ -104,7 +96,6 @@ public class ReporteGenerator {
         }
         reporte.append("\n");
 
-        // No conformidades por prioridad
         reporte.append("POR PRIORIDAD\n");
         reporte.append("-".repeat(15)).append("\n");
         for (Prioridad prioridad : Prioridad.values()) {
@@ -113,10 +104,9 @@ public class ReporteGenerator {
         }
         reporte.append("\n");
 
-        // No conformidades vencidas
         List<NoConformidad> vencidas = noConformidades.stream()
                 .filter(NoConformidad::estaVencida)
-                .collect(Collectors.toList());
+                .toList();
 
         if (!vencidas.isEmpty()) {
             reporte.append("NO CONFORMIDADES VENCIDAS (").append(vencidas.size()).append(")\n");
@@ -132,7 +122,6 @@ public class ReporteGenerator {
         return reporte.toString();
     }
 
-    // Exportar reporte a archivo
     public static void exportarReporteAArchivo(String contenido, String nombreArchivo) {
         try (PrintWriter writer = new PrintWriter(new FileWriter("reports/" + nombreArchivo))) {
             writer.print(contenido);
@@ -142,7 +131,6 @@ public class ReporteGenerator {
         }
     }
 
-    // Generar reporte de auditoría
     public static String generarReporteAuditoria(List<Proceso> procesos,
                                                  List<Indicador> indicadores,
                                                  List<NoConformidad> noConformidades) {
@@ -152,7 +140,6 @@ public class ReporteGenerator {
         reporte.append("=".repeat(55)).append("\n");
         reporte.append("Fecha: ").append(LocalDate.now().format(FORMATO_FECHA)).append("\n\n");
 
-        // Estado de cumplimiento
         reporte.append("ESTADO DE CUMPLIMIENTO\n");
         reporte.append("-".repeat(25)).append("\n");
 
@@ -168,10 +155,9 @@ public class ReporteGenerator {
         }
         reporte.append("\n");
 
-        // Hallazgos críticos
         List<NoConformidad> criticas = noConformidades.stream()
                 .filter(nc -> nc.getPrioridad() == Prioridad.CRITICA && nc.getEstado() != EstadoNoConformidad.CERRADA)
-                .collect(Collectors.toList());
+                .toList();
 
         if (!criticas.isEmpty()) {
             reporte.append("NO CONFORMIDADES CRÍTICAS PENDIENTES\n");
@@ -186,7 +172,6 @@ public class ReporteGenerator {
         return reporte.toString();
     }
 
-    // Métodos auxiliares
     private static long contarIndicadoresPorColor(List<Indicador> indicadores, String color) {
         return indicadores.stream().filter(i -> color.equals(i.getEstadoSemaforo())).count();
     }

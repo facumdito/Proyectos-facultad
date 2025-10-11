@@ -7,38 +7,20 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Clase principal del Sistema de Gestión de Calidad ISO 9001
- * Este sistema permite:
- * - Gestión completa de procesos empresariales
- * - Monitoreo de indicadores de calidad en tiempo real
- * - Seguimiento de no conformidades y acciones correctivas
- * - Generación de reportes para auditorías ISO 9001
- * - Dashboard ejecutivo con métricas clave
- *
- * @author Tu Nombre
- * @version 1.0
- * @since 2024
- */
 public class MainApplication {
 
     public static void main(String[] args) {
-        // Configurar Look & Feel del sistema
         configurarLookAndFeel();
 
-        // Mostrar splash screen
         mostrarSplashScreen();
 
-        // Inicializar base de datos
         inicializarSistema();
 
-        // Lanzar aplicación principal
         SwingUtilities.invokeLater(() -> {
             try {
                 DashboardPrincipal dashboard = new DashboardPrincipal();
                 dashboard.setVisible(true);
 
-                // Mensaje de bienvenida
                 mostrarMensajeBienvenida(dashboard);
 
             } catch (Exception e) {
@@ -47,15 +29,10 @@ public class MainApplication {
         });
     }
 
-    /**
-     * Configura el Look & Feel de la aplicación
-     */
     private static void configurarLookAndFeel() {
         try {
-            // Intentar usar el Look & Feel del sistema
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-            // Configuraciones adicionales de UI
             UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 12));
             UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, 11));
             UIManager.put("Table.font", new Font("Arial", Font.PLAIN, 11));
@@ -65,13 +42,10 @@ public class MainApplication {
 
         } catch (Exception e) {
             System.err.println("No se pudo configurar el Look & Feel: " + e.getMessage());
-            // Continuar con el Look & Feel por defecto
         }
     }
 
-    /**
-     * Muestra una pantalla de carga inicial
-     */
+
     private static void mostrarSplashScreen() {
         JFrame splash = new JFrame();
         splash.setUndecorated(true);
@@ -79,40 +53,33 @@ public class MainApplication {
         splash.setLocationRelativeTo(null);
         splash.setLayout(new BorderLayout());
 
-        // Panel principal con gradiente
         JPanel panelPrincipal = crearPanelConGradiente();
 
-        // Título principal
         JLabel titulo = new JLabel("Sistema de Gestión de Calidad", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
         titulo.setForeground(Color.WHITE);
         titulo.setBorder(BorderFactory.createEmptyBorder(50, 20, 10, 20));
 
-        // Subtítulo
         JLabel subtitulo = new JLabel("ISO 9001:2015", SwingConstants.CENTER);
         subtitulo.setFont(new Font("Arial", Font.PLAIN, 18));
         subtitulo.setForeground(new Color(236, 240, 241));
 
-        // Información de carga
         JLabel lblCarga = new JLabel("Inicializando sistema...", SwingConstants.CENTER);
         lblCarga.setFont(new Font("Arial", Font.PLAIN, 12));
         lblCarga.setForeground(new Color(189, 195, 199));
         lblCarga.setBorder(BorderFactory.createEmptyBorder(30, 20, 50, 20));
 
-        // Barra de progreso
         JProgressBar barraProgreso = new JProgressBar();
         barraProgreso.setIndeterminate(true);
         barraProgreso.setStringPainted(true);
         barraProgreso.setString("Cargando componentes...");
         barraProgreso.setBorder(BorderFactory.createEmptyBorder(0, 50, 30, 50));
 
-        // Versión
         JLabel version = new JLabel("Versión 1.0 - Proyecto Universitario", SwingConstants.CENTER);
         version.setFont(new Font("Arial", Font.PLAIN, 10));
         version.setForeground(new Color(127, 140, 141));
         version.setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
 
-        // Ensamblar componentes
         JPanel panelCentral = new JPanel(new BorderLayout());
         panelCentral.setOpaque(false);
         panelCentral.add(subtitulo, BorderLayout.NORTH);
@@ -126,7 +93,6 @@ public class MainApplication {
         splash.add(panelPrincipal);
         splash.setVisible(true);
 
-        // Simular tiempo de carga
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -136,9 +102,6 @@ public class MainApplication {
         splash.dispose();
     }
 
-    /**
-     * Crea un panel con gradiente para el splash screen
-     */
     private static JPanel crearPanelConGradiente() {
         JPanel panelPrincipal = new JPanel() {
             @Override
@@ -147,7 +110,6 @@ public class MainApplication {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-                // Crear gradiente
                 GradientPaint gradient = new GradientPaint(
                         0, 0, new Color(41, 128, 185),
                         0, getHeight(), new Color(44, 62, 80)
@@ -160,9 +122,6 @@ public class MainApplication {
         return panelPrincipal;
     }
 
-    /**
-     * Inicializa el sistema y la base de datos de manera segura
-     */
     private static void inicializarSistema() {
         try {
             System.out.println(repetirCaracter());
@@ -170,24 +129,18 @@ public class MainApplication {
             System.out.println("Iniciando aplicación...");
             System.out.println(repetirCaracter());
 
-            // Paso 1: Inicializar base de datos MySQL (si está disponible)
             try {
-                // Comentado hasta que MySQLDatabaseHelper esté implementado
                 System.out.println("⚠ MySQL: Configuración pendiente");
             } catch (Exception mysqlError) {
                 System.out.println("⚠ MySQL no disponible, usando datos temporales");
             }
 
-            // Paso 2: Inicializar DatabaseHelper (datos temporales/archivos)
             try {
-                // Comentado hasta que DatabaseHelper esté implementado
-                // DatabaseHelper.inicializarDatos();
                 System.out.println("✓ Datos temporales inicializados");
             } catch (Exception dbError) {
                 System.out.println("⚠ DatabaseHelper no disponible: " + dbError.getMessage());
             }
 
-            // Paso 3: Verificar componentes del sistema
             verificarComponentesDelSistema();
 
             System.out.println("✓ Sistema inicializado correctamente");
@@ -196,18 +149,13 @@ public class MainApplication {
 
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
-            // Mostrar error al usuario
             mostrarErrorInicializacion(e);
         }
     }
 
-    /**
-     * Verifica que los componentes principales del sistema estén disponibles
-     */
     private static void verificarComponentesDelSistema() {
         System.out.println("\n--- Verificando componentes ---");
 
-        // Verificar memoria disponible
         Runtime runtime = Runtime.getRuntime();
         long memoriaTotal = runtime.totalMemory() / 1024 / 1024;
         long memoriaLibre = runtime.freeMemory() / 1024 / 1024;
@@ -219,25 +167,19 @@ public class MainApplication {
             System.out.println("⚠ Advertencia: Poca memoria disponible");
         }
 
-        // Verificar permisos de escritura - MEJORADO
         verificarPermisosEscritura();
 
         System.out.println("--- Verificación completada ---\n");
     }
 
-    /**
-     * Verifica permisos de escritura de forma segura
-     */
     private static void verificarPermisosEscritura() {
         try {
             String directorioTrabajo = System.getProperty("user.dir");
             File testFile = new File(directorioTrabajo, "test_write.tmp");
 
-            // Intentar crear el archivo
             boolean creado = testFile.createNewFile();
 
             if (creado) {
-                // El archivo se creó, ahora intentar eliminarlo
                 boolean eliminado = testFile.delete();
                 if (eliminado) {
                     System.out.println("✓ Permisos de escritura verificados");
@@ -245,7 +187,6 @@ public class MainApplication {
                     System.out.println("⚠ Advertencia: Archivo creado pero no se pudo eliminar");
                 }
             } else {
-                // El archivo ya existía, verificar si podemos escribir en el directorio
                 File directorio = new File(directorioTrabajo);
                 if (directorio.canWrite()) {
                     System.out.println("✓ Permisos de escritura verificados (archivo ya existía)");
@@ -261,10 +202,6 @@ public class MainApplication {
         }
     }
 
-    /**
-     * Muestra un mensaje de bienvenida al usuario
-     * Compatible con Java 8+
-     */
     private static void mostrarMensajeBienvenida(Component parent) {
         String mensaje = """
                 ¡Bienvenido al Sistema de Gestión de Calidad ISO 9001!
@@ -297,10 +234,6 @@ public class MainApplication {
         }
     }
 
-    /**
-     * Muestra un tour básico del sistema
-     * Compatible con Java 8+
-     */
     private static void mostrarTourSistema(Component parent) {
         String[] pasos = {
                 """
@@ -351,10 +284,6 @@ Generación automática de:
         }
     }
 
-    /**
-     * Muestra un error crítico de inicio
-     * Compatible con Java 8+
-     */
     private static void mostrarErrorInicio(Exception e) {
         String mensaje = String.format(
                 """
@@ -379,9 +308,6 @@ Generación automática de:
         System.exit(1);
     }
 
-    /**
-     * Muestra diálogo de error de inicialización con opciones
-     */
     private static void mostrarErrorInicializacion(Exception e) {
         String mensaje = String.format(
                 """
@@ -416,9 +342,6 @@ Generación automática de:
         }
     }
 
-    /**
-     * Método auxiliar para repetir caracteres (compatible con Java 8+)
-     */
     private static String repetirCaracter() {
         return "=".repeat(Math.max(0, 50));
     }

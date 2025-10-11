@@ -38,17 +38,13 @@ public class VentanaAuditorias extends JFrame {
     }
 
     private void crearComponentes() {
-        // Panel superior - Filtros
         JPanel panelFiltros = crearPanelFiltros();
         add(panelFiltros, BorderLayout.NORTH);
 
-        // Panel central dividido
         JSplitPane splitPrincipal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
-        // Panel izquierdo - Tabla
         JPanel panelTabla = crearPanelTabla();
 
-        // Panel derecho dividido - Detalles y estadísticas
         JSplitPane splitDerecho = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         JPanel panelDetalles = crearPanelDetalles();
         panelEstadisticas = crearPanelEstadisticas();
@@ -63,7 +59,6 @@ public class VentanaAuditorias extends JFrame {
 
         add(splitPrincipal, BorderLayout.CENTER);
 
-        // Panel inferior - Botones
         JPanel panelBotones = crearPanelBotones();
         add(panelBotones, BorderLayout.SOUTH);
     }
@@ -74,7 +69,7 @@ public class VentanaAuditorias extends JFrame {
 
         panel.add(new JLabel("Buscar:"));
         txtBuscar = new JTextField(20);
-        txtBuscar.addActionListener(e -> filtrarAuditorias());
+        txtBuscar.addActionListener(_ -> filtrarAuditorias());
         panel.add(txtBuscar);
 
         panel.add(new JLabel("Tipo:"));
@@ -82,7 +77,7 @@ public class VentanaAuditorias extends JFrame {
         comboTipo.addItem("TODOS");
         comboTipo.addItem("Interna");
         comboTipo.addItem("Externa");
-        comboTipo.addActionListener(e -> filtrarAuditorias());
+        comboTipo.addActionListener(_ -> filtrarAuditorias());
         panel.add(comboTipo);
 
         panel.add(new JLabel("Estado:"));
@@ -92,15 +87,15 @@ public class VentanaAuditorias extends JFrame {
         comboEstado.addItem("EN_CURSO");
         comboEstado.addItem("COMPLETADA");
         comboEstado.addItem("VENCIDA");
-        comboEstado.addActionListener(e -> filtrarAuditorias());
+        comboEstado.addActionListener(_ -> filtrarAuditorias());
         panel.add(comboEstado);
 
         JButton btnFiltrar = new JButton("Filtrar");
-        btnFiltrar.addActionListener(e -> filtrarAuditorias());
+        btnFiltrar.addActionListener(_ -> filtrarAuditorias());
         panel.add(btnFiltrar);
 
         JButton btnLimpiar = new JButton("Limpiar");
-        btnLimpiar.addActionListener(e -> limpiarFiltros());
+        btnLimpiar.addActionListener(_ -> limpiarFiltros());
         panel.add(btnLimpiar);
 
         return panel;
@@ -110,7 +105,6 @@ public class VentanaAuditorias extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Auditorías"));
 
-        // Crear modelo de tabla
         String[] columnas = {"ID", "Título", "Tipo", "Estado", "Fecha Programada", "Auditor Líder", "Calificación"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
@@ -130,12 +124,10 @@ public class VentanaAuditorias extends JFrame {
             }
         });
 
-        // Configurar renderers
         tablaAuditorias.getColumnModel().getColumn(2).setCellRenderer(new TipoRenderer());
         tablaAuditorias.getColumnModel().getColumn(3).setCellRenderer(new EstadoRenderer());
         tablaAuditorias.getColumnModel().getColumn(6).setCellRenderer(new CalificacionRenderer());
 
-        // Configurar anchuras de columnas
         tablaAuditorias.getColumnModel().getColumn(0).setPreferredWidth(80);
         tablaAuditorias.getColumnModel().getColumn(1).setPreferredWidth(200);
         tablaAuditorias.getColumnModel().getColumn(2).setPreferredWidth(80);
@@ -169,11 +161,9 @@ public class VentanaAuditorias extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Estadísticas"));
 
-        // Panel de resumen estadístico
         JPanel panelStats = new JPanel(new GridLayout(2, 2, 5, 5));
         panelStats.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Crear tarjetas de estadísticas
         panelStats.add(crearTarjetaEstadistica("Total", Color.BLUE));
         panelStats.add(crearTarjetaEstadistica("Programadas", new Color(241, 196, 15)));
         panelStats.add(crearTarjetaEstadistica("Completadas", new Color(39, 174, 96)));
@@ -207,22 +197,22 @@ public class VentanaAuditorias extends JFrame {
         JPanel panel = new JPanel(new FlowLayout());
 
         JButton btnNueva = new JButton("Nueva Auditoría");
-        btnNueva.addActionListener(e -> mostrarFormularioNuevaAuditoria());
+        btnNueva.addActionListener(_ -> mostrarFormularioNuevaAuditoria());
 
         JButton btnIniciar = new JButton("Iniciar Auditoría");
-        btnIniciar.addActionListener(e -> iniciarAuditoria());
+        btnIniciar.addActionListener(_ -> iniciarAuditoria());
 
         JButton btnHallazgos = new JButton("Registrar Hallazgos");
-        btnHallazgos.addActionListener(e -> registrarHallazgos());
+        btnHallazgos.addActionListener(_ -> registrarHallazgos());
 
         JButton btnCompletar = new JButton("Completar Auditoría");
-        btnCompletar.addActionListener(e -> completarAuditoria());
+        btnCompletar.addActionListener(_ -> completarAuditoria());
 
         JButton btnReporte = new JButton("Generar Reporte");
-        btnReporte.addActionListener(e -> generarReporteAuditorias());
+        btnReporte.addActionListener(_ -> generarReporteAuditorias());
 
         JButton btnSalir = new JButton("Cerrar Ventana");
-        btnSalir.addActionListener(e -> dispose());
+        btnSalir.addActionListener(_ -> dispose());
 
         panel.add(btnNueva);
         panel.add(btnIniciar);
@@ -267,18 +257,15 @@ public class VentanaAuditorias extends JFrame {
         for (Auditoria auditoria : auditorias) {
             boolean coincide = true;
 
-            // Filtrar por búsqueda de texto
             if (!busqueda.isEmpty()) {
                 coincide = auditoria.getTitulo().toLowerCase().contains(busqueda.toLowerCase()) ||
                         auditoria.getAuditorLider().toLowerCase().contains(busqueda.toLowerCase());
             }
 
-            // Filtrar por tipo
             if (!"TODOS".equals(tipoSeleccionado)) {
                 coincide = coincide && auditoria.getTipo().equals(tipoSeleccionado);
             }
 
-            // Filtrar por estado
             if (!"TODOS".equals(estadoSeleccionado)) {
                 coincide = coincide && auditoria.getEstadoAuditoria().equals(estadoSeleccionado);
             }
@@ -348,7 +335,6 @@ public class VentanaAuditorias extends JFrame {
                 detalles.append(auditoria.getObjetivos()).append("\n");
             }
 
-            // Procesos auditados
             if (!auditoria.getProcesosAuditados().isEmpty()) {
                 detalles.append("\nPROCESOS AUDITADOS\n");
                 detalles.append("-".repeat(20)).append("\n");
@@ -357,7 +343,6 @@ public class VentanaAuditorias extends JFrame {
                 }
             }
 
-            // Hallazgos
             if (!auditoria.getHallazgos().isEmpty()) {
                 detalles.append("\nHALLAZGOS\n");
                 detalles.append("-".repeat(15)).append("\n");
@@ -366,7 +351,6 @@ public class VentanaAuditorias extends JFrame {
                 }
             }
 
-            // No conformidades detectadas
             if (!auditoria.getNoConformidadesDetectadas().isEmpty()) {
                 detalles.append("\nNO CONFORMIDADES DETECTADAS\n");
                 detalles.append("-".repeat(30)).append("\n");
@@ -375,7 +359,6 @@ public class VentanaAuditorias extends JFrame {
                 }
             }
 
-            // Resultados (si está completada)
             if (auditoria.isCompletada()) {
                 detalles.append("\nRESULTADOS\n");
                 detalles.append("-".repeat(15)).append("\n");
@@ -403,7 +386,6 @@ public class VentanaAuditorias extends JFrame {
             Component[] tarjetas = panelEst.getComponents();
 
             if (tarjetas.length >= 4) {
-                // Actualizar valores
                 ((JLabel) ((JPanel) tarjetas[0]).getComponent(1)).setText(String.valueOf(auditoriaManager.getTotalAuditorias()));
                 ((JLabel) ((JPanel) tarjetas[1]).getComponent(1)).setText(String.valueOf(auditoriaManager.getAuditoriasProgramadas()));
                 ((JLabel) ((JPanel) tarjetas[2]).getComponent(1)).setText(String.valueOf(auditoriaManager.getAuditoriasCompletadas()));
@@ -413,14 +395,193 @@ public class VentanaAuditorias extends JFrame {
     }
 
     private void mostrarFormularioNuevaAuditoria() {
-        JOptionPane.showMessageDialog(this,
-                "Funcionalidad de creación de auditorías disponible en la versión completa.\n\n" +
-                        "Esta ventana permitiría:\n" +
-                        "- Programar nueva auditoría\n" +
-                        "- Asignar auditores\n" +
-                        "- Definir alcance y objetivos",
-                "Nueva Auditoría",
-                JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialogo = new JDialog(this, "Nueva Auditoría", true);
+        dialogo.setSize(700, 650);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setLayout(new BorderLayout());
+
+        JPanel panelForm = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JTextField txtId = new JTextField(20);
+        JTextField txtTitulo = new JTextField(35);
+        JComboBox<String> cmbTipo = new JComboBox<>(new String[]{"Interna", "Externa"});
+        JTextField txtAuditorLider = new JTextField(30);
+        JTextArea txtAuditores = new JTextArea(2, 30);
+        txtAuditores.setLineWrap(true);
+        txtAuditores.setWrapStyleWord(true);
+
+        JSpinner spinnerDias = new JSpinner(new SpinnerNumberModel(15, 1, 365, 1));
+
+        JTextArea txtAlcance = new JTextArea(3, 30);
+        txtAlcance.setLineWrap(true);
+        txtAlcance.setWrapStyleWord(true);
+
+        JTextArea txtObjetivos = new JTextArea(3, 30);
+        txtObjetivos.setLineWrap(true);
+        txtObjetivos.setWrapStyleWord(true);
+
+        JTextArea txtProcesos = new JTextArea(2, 30);
+        txtProcesos.setLineWrap(true);
+        txtProcesos.setWrapStyleWord(true);
+
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelForm.add(new JLabel("ID:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtId, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelForm.add(new JLabel("Título:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtTitulo, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        panelForm.add(new JLabel("Tipo:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(cmbTipo, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 3;
+        panelForm.add(new JLabel("Auditor Líder:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(txtAuditorLider, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 4;
+        panelForm.add(new JLabel("Auditores (separados por coma):"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(new JScrollPane(txtAuditores), gbc);
+
+        gbc.gridx = 0; gbc.gridy = 5;
+        panelForm.add(new JLabel("Días hasta la auditoría:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(spinnerDias, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 6;
+        panelForm.add(new JLabel("Alcance:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(new JScrollPane(txtAlcance), gbc);
+
+        gbc.gridx = 0; gbc.gridy = 7;
+        panelForm.add(new JLabel("Objetivos:"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(new JScrollPane(txtObjetivos), gbc);
+
+        gbc.gridx = 0; gbc.gridy = 8;
+        panelForm.add(new JLabel("Procesos a auditar (separados por coma):"), gbc);
+        gbc.gridx = 1;
+        panelForm.add(new JScrollPane(txtProcesos), gbc);
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        JButton btnGuardar = new JButton("Programar Auditoría");
+        JButton btnCancelar = new JButton("Cancelar");
+
+        btnGuardar.addActionListener(_ -> {
+            if (validarFormularioAuditoria(txtId, txtTitulo, txtAuditorLider, txtAlcance, txtObjetivos)) {
+                try {
+                    String id = txtId.getText().trim();
+                    String titulo = txtTitulo.getText().trim();
+                    String tipo = (String) cmbTipo.getSelectedItem();
+                    String auditorLider = txtAuditorLider.getText().trim();
+                    String alcance = txtAlcance.getText().trim();
+                    String objetivos = txtObjetivos.getText().trim();
+                    int diasHasta = (Integer) spinnerDias.getValue();
+                    LocalDate fechaProgramada = LocalDate.now().plusDays(diasHasta);
+
+                    Auditoria nuevaAuditoria = new Auditoria(
+                            id, titulo, tipo, fechaProgramada, auditorLider
+                    );
+
+                    nuevaAuditoria.setAlcance(alcance);
+                    nuevaAuditoria.setObjetivos(objetivos);
+
+                    String auditoresTexto = txtAuditores.getText().trim();
+                    if (!auditoresTexto.isEmpty()) {
+                        String[] auditores = auditoresTexto.split(",");
+                        for (String auditor : auditores) {
+                            if (!auditor.trim().isEmpty()) {
+                                nuevaAuditoria.agregarAuditor(auditor.trim());
+                            }
+                        }
+                    }
+
+                    String procesosTexto = txtProcesos.getText().trim();
+                    if (!procesosTexto.isEmpty()) {
+                        String[] procesos = procesosTexto.split(",");
+                        for (String proceso : procesos) {
+                            if (!proceso.trim().isEmpty()) {
+                                nuevaAuditoria.agregarProcesoAuditado(proceso.trim());
+                            }
+                        }
+                    }
+
+                    auditoriaManager.agregarAuditoria(nuevaAuditoria);
+                    cargarDatos();
+                    dialogo.dispose();
+
+                    JOptionPane.showMessageDialog(this,
+                            "Auditoría programada exitosamente para el " + fechaProgramada,
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(dialogo,
+                            "Error al crear la auditoría: " + e.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        btnCancelar.addActionListener(_ -> dialogo.dispose());
+
+        panelBotones.add(btnGuardar);
+        panelBotones.add(btnCancelar);
+
+        dialogo.add(new JScrollPane(panelForm), BorderLayout.CENTER);
+        dialogo.add(panelBotones, BorderLayout.SOUTH);
+
+        dialogo.setVisible(true);
+    }
+
+    private boolean validarFormularioAuditoria(JTextField txtId, JTextField txtTitulo,
+                                               JTextField txtAuditorLider, JTextArea txtAlcance,
+                                               JTextArea txtObjetivos) {
+        if (txtId.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El ID es obligatorio",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (auditoriaManager.obtenerAuditoria(txtId.getText().trim()) != null) {
+            JOptionPane.showMessageDialog(this, "Ya existe una auditoría con ese ID",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtTitulo.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El título es obligatorio",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtAuditorLider.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El auditor líder es obligatorio",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtAlcance.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El alcance es obligatorio",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (txtObjetivos.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Los objetivos son obligatorios",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
 
     private void iniciarAuditoria() {
@@ -474,13 +635,11 @@ public class VentanaAuditorias extends JFrame {
 
         String auditoriaId = (String) modeloTabla.getValueAt(filaSeleccionada, 0);
 
-        // Solicitar conclusión
         String conclusion = JOptionPane.showInputDialog(this,
                 "Ingrese la conclusión de la auditoría:", "Completar Auditoría",
                 JOptionPane.QUESTION_MESSAGE);
 
         if (conclusion != null && !conclusion.trim().isEmpty()) {
-            // Solicitar calificación
             String calificacionStr = JOptionPane.showInputDialog(this,
                     "Ingrese la calificación general (0.0 - 10.0):", "Calificación",
                     JOptionPane.QUESTION_MESSAGE);
@@ -523,14 +682,13 @@ public class VentanaAuditorias extends JFrame {
 
         JPanel panelBotones = new JPanel(new FlowLayout());
         JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> dialogoReporte.dispose());
+        btnCerrar.addActionListener(_ -> dialogoReporte.dispose());
         panelBotones.add(btnCerrar);
 
         dialogoReporte.add(panelBotones, BorderLayout.SOUTH);
         dialogoReporte.setVisible(true);
     }
 
-    // Renderers personalizados
     private static class TipoRenderer extends JLabel implements TableCellRenderer {
         public TipoRenderer() {
             setOpaque(true);
@@ -629,13 +787,13 @@ public class VentanaAuditorias extends JFrame {
                 try {
                     double cal = Double.parseDouble(calificacion);
                     if (cal >= 8.0) {
-                        setBackground(new Color(39, 174, 96)); // Verde - Excelente
+                        setBackground(new Color(39, 174, 96));
                         setForeground(Color.WHITE);
                     } else if (cal >= 6.0) {
-                        setBackground(new Color(241, 196, 15)); // Amarillo - Bueno
+                        setBackground(new Color(241, 196, 15));
                         setForeground(Color.BLACK);
                     } else {
-                        setBackground(new Color(231, 76, 60)); // Rojo - Necesita mejoras
+                        setBackground(new Color(231, 76, 60));
                         setForeground(Color.WHITE);
                     }
                 } catch (NumberFormatException e) {

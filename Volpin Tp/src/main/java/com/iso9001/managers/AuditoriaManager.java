@@ -7,8 +7,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AuditoriaManager {
-    private List<Auditoria> auditorias;
-    private List<Empleado> auditoresDisponibles;
+    private final List<Auditoria> auditorias;
+    private final List<Empleado> auditoresDisponibles;
 
     public AuditoriaManager() {
         this.auditorias = new ArrayList<>();
@@ -17,7 +17,6 @@ public class AuditoriaManager {
         crearAuditoriasEjemplo();
     }
 
-    // Operaciones CRUD para Auditorías
     public void agregarAuditoria(Auditoria auditoria) {
         if (auditoria != null && !existeAuditoria(auditoria.getId())) {
             auditorias.add(auditoria);
@@ -59,7 +58,6 @@ public class AuditoriaManager {
         return eliminada;
     }
 
-    // Búsquedas y filtros
     public List<Auditoria> buscarPorTitulo(String titulo) {
         return auditorias.stream()
                 .filter(a -> a.getTitulo().toLowerCase().contains(titulo.toLowerCase()))
@@ -91,7 +89,6 @@ public class AuditoriaManager {
                 .collect(Collectors.toList());
     }
 
-    // Planificación y programación
     public void programarAuditoria(String titulo, String tipo, LocalDate fecha, String auditorLider) {
         String id = "AUD" + String.format("%03d", auditorias.size() + 1);
         Auditoria auditoria = new Auditoria(id, titulo, tipo, fecha, auditorLider);
@@ -120,7 +117,6 @@ public class AuditoriaManager {
                 .collect(Collectors.toList());
     }
 
-    // Gestión de auditores
     public List<Empleado> obtenerAuditoresDisponibles() {
         return auditoresDisponibles.stream()
                 .filter(Empleado::estaCalificadoParaAuditorias)
@@ -143,11 +139,9 @@ public class AuditoriaManager {
                         !a.isCompletada());
     }
 
-    // Ejecución de auditorías
     public void iniciarAuditoria(String auditoriaId) {
         Auditoria auditoria = obtenerAuditoria(auditoriaId);
         if (auditoria != null && "PROGRAMADA".equals(auditoria.getEstadoAuditoria())) {
-            // Cambiar estado a EN_CURSO (esto se hace automáticamente por la fecha)
             System.out.println("Auditoría iniciada: " + auditoria.getTitulo());
         }
     }
@@ -179,7 +173,6 @@ public class AuditoriaManager {
         }
     }
 
-    // Análisis y métricas
     public Map<String, Long> obtenerEstadisticasPorEstado() {
         Map<String, Long> estadisticas = new HashMap<>();
         estadisticas.put("PROGRAMADA", auditorias.stream().filter(a -> "PROGRAMADA".equals(a.getEstadoAuditoria())).count());
@@ -213,23 +206,19 @@ public class AuditoriaManager {
         return estadisticas;
     }
 
-    // Alertas y notificaciones
     public List<String> generarAlertas() {
         List<String> alertas = new ArrayList<>();
 
-        // Auditorías vencidas
         List<Auditoria> vencidas = obtenerAuditoriasVencidas();
         if (!vencidas.isEmpty()) {
             alertas.add("¡ALERTA! " + vencidas.size() + " auditorías vencidas");
         }
 
-        // Auditorías próximas
         List<Auditoria> proximas = obtenerAuditoriasPorVencer(7);
         if (!proximas.isEmpty()) {
             alertas.add("RECORDATORIO: " + proximas.size() + " auditorías programadas en 7 días");
         }
 
-        // Auditorías sin auditores asignados
         long sinAuditores = auditorias.stream()
                 .filter(a -> "PROGRAMADA".equals(a.getEstadoAuditoria()) && a.getAuditores().isEmpty())
                 .count();
@@ -240,15 +229,14 @@ public class AuditoriaManager {
         return alertas;
     }
 
-    // Planificación automática
     public List<LocalDate> sugerirFechasAuditoria(String auditor, int proximosMeses) {
         List<LocalDate> fechasDisponibles = new ArrayList<>();
-        LocalDate fechaInicio = LocalDate.now().plusDays(7); // Empezar en una semana
+        LocalDate fechaInicio = LocalDate.now().plusDays(7);
         LocalDate fechaFin = fechaInicio.plusMonths(proximosMeses);
 
         LocalDate fechaActual = fechaInicio;
         while (!fechaActual.isAfter(fechaFin)) {
-            if (fechaActual.getDayOfWeek().getValue() <= 5 && // Solo días laborables
+            if (fechaActual.getDayOfWeek().getValue() <= 5 &&
                     auditorDisponible(auditor, fechaActual)) {
                 fechasDisponibles.add(fechaActual);
             }
@@ -258,7 +246,6 @@ public class AuditoriaManager {
         return fechasDisponibles.stream().limit(10).collect(Collectors.toList());
     }
 
-    // Validaciones
     public boolean existeAuditoria(String id) {
         return auditorias.stream().anyMatch(a -> a.getId().equals(id));
     }
@@ -269,11 +256,9 @@ public class AuditoriaManager {
         if (auditoria.getTitulo() == null || auditoria.getTitulo().trim().isEmpty()) return false;
         if (auditoria.getTipo() == null || auditoria.getTipo().trim().isEmpty()) return false;
         if (auditoria.getFechaProgramada() == null) return false;
-        if (auditoria.getAuditorLider() == null || auditoria.getAuditorLider().trim().isEmpty()) return false;
-        return true;
+        return auditoria.getAuditorLider() != null && !auditoria.getAuditorLider().trim().isEmpty();
     }
 
-    // Reportes
     public String generarReporteAuditorias() {
         StringBuilder reporte = new StringBuilder();
         reporte.append("REPORTE DE AUDITORÍAS\n");
@@ -318,26 +303,27 @@ public class AuditoriaManager {
         return plan.toString();
     }
 
-    // Inicialización de datos
     private void inicializarAuditoresDisponibles() {
-        auditoresDisponibles.add(new Empleado("EMP001", "Carlos", "Mendoza", "carlos.mendoza@empresa.com",
-                "Auditor Senior", "Calidad"));
-        auditoresDisponibles.get(0).setAuditorInterno(true);
-        auditoresDisponibles.get(0).agregarCertificacionISO("ISO 9001");
+        Empleado emp1 = new Empleado("EMP001", "Carlos", "Mendoza", "carlos.mendoza@empresa.com",
+                "Auditor Senior", "Calidad");
+        emp1.setAuditorInterno(true);
+        emp1.agregarCertificacionISO("ISO 9001");
+        auditoresDisponibles.add(emp1);
 
-        auditoresDisponibles.add(new Empleado("EMP002", "Ana", "López", "ana.lopez@empresa.com",
-                "Coordinadora Calidad", "Calidad"));
-        auditoresDisponibles.get(1).setAuditorInterno(true);
-        auditoresDisponibles.get(1).agregarCertificacionISO("ISO 9001");
+        Empleado emp2 = new Empleado("EMP002", "Ana", "López", "ana.lopez@empresa.com",
+                "Coordinadora Calidad", "Calidad");
+        emp2.setAuditorInterno(true);
+        emp2.agregarCertificacionISO("ISO 9001");
+        auditoresDisponibles.add(emp2);
 
-        auditoresDisponibles.add(new Empleado("EMP003", "Roberto", "Silva", "roberto.silva@empresa.com",
-                "Jefe Procesos", "Operaciones"));
-        auditoresDisponibles.get(2).setAuditorInterno(true);
-        auditoresDisponibles.get(2).agregarCertificacionISO("ISO 9001");
+        Empleado emp3 = new Empleado("EMP003", "Roberto", "Silva", "roberto.silva@empresa.com",
+                "Jefe Procesos", "Operaciones");
+        emp3.setAuditorInterno(true);
+        emp3.agregarCertificacionISO("ISO 9001");
+        auditoresDisponibles.add(emp3);
     }
 
     private void crearAuditoriasEjemplo() {
-        // Auditoría completada
         Auditoria aud1 = new Auditoria("AUD001", "Auditoría Interna Q1 2024", "Interna",
                 LocalDate.now().minusMonths(2), "Carlos Mendoza");
         aud1.agregarAuditor("Ana López");
@@ -349,7 +335,6 @@ public class AuditoriaManager {
                 "Sistema de calidad funcionando correctamente", 8.5);
         agregarAuditoria(aud1);
 
-        // Auditoría programada
         Auditoria aud2 = new Auditoria("AUD002", "Auditoría Externa ISO 9001", "Externa",
                 LocalDate.now().plusDays(15), "Auditor Externo");
         aud2.agregarAuditor("Carlos Mendoza");
@@ -358,7 +343,6 @@ public class AuditoriaManager {
         aud2.setObjetivos("Verificar cumplimiento de requisitos ISO 9001:2015");
         agregarAuditoria(aud2);
 
-        // Auditoría de seguimiento
         Auditoria aud3 = new Auditoria("AUD003", "Seguimiento Acciones Correctivas", "Interna",
                 LocalDate.now().plusDays(30), "Roberto Silva");
         aud3.agregarProcesoAuditado("P004");
@@ -367,7 +351,6 @@ public class AuditoriaManager {
         agregarAuditoria(aud3);
     }
 
-    // Getters para estadísticas
     public int getTotalAuditorias() {
         return auditorias.size();
     }
