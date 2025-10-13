@@ -2,7 +2,7 @@
 
 Sistema integral de gestión de calidad diseñado para cumplir con los estándares ISO 9001, que permite administrar procesos, indicadores, no conformidades y auditorías.
 
-## 📋 Descripción
+## · Descripción
 
 Este sistema proporciona una solución completa para la gestión de calidad organizacional, incluyendo:
 
@@ -12,7 +12,7 @@ Este sistema proporciona una solución completa para la gestión de calidad orga
 - Programación y seguimiento de auditorías
 - Generación de reportes y análisis
 
-## 🚀 Características Principales
+## · Características Principales
 
 ### Dashboard Principal
 - **Procesos Activos**: Visualización de procesos en operación
@@ -58,7 +58,7 @@ Tipos de reportes disponibles:
 - Análisis de Cumplimiento ISO 9001
 - Dashboard Ejecutivo
 
-## 📊 Estructura de Datos
+## · Estructura de Datos
 
 ### Procesos
 ```
@@ -80,7 +80,7 @@ ID | Título | Estado | Prioridad | Proceso | Responsable | Días Restantes
 ID | Título | Tipo | Estado | Fecha Programada | Auditor Líder | Calificación
 ```
 
-## 📁 Archivos de Ejemplo
+## · Archivos de Ejemplo
 
 El sistema incluye archivos CSV de ejemplo para cada módulo:
 - `procesos_ejemplo.csv`: Procesos organizacionales
@@ -88,7 +88,7 @@ El sistema incluye archivos CSV de ejemplo para cada módulo:
 - `no_conformidades_ejemplo.csv`: No conformidades
 - `auditorias_ejemplo.csv`: Auditorías programadas
 
-## 🎯 Uso del Sistema
+## · Uso del Sistema
 
 ### Flujo de Trabajo Típico
 
@@ -99,7 +99,7 @@ El sistema incluye archivos CSV de ejemplo para cada módulo:
 5. **Programar Auditorías**: Planificar auditorías internas/externas
 6. **Generar Reportes**: Analizar cumplimiento y tomar decisiones
 
-## 📈 Indicadores Clave
+## · Indicadores Clave
 
 - **Cumplimiento General**: Porcentaje de cumplimiento del sistema
 - **Indicadores Verde**: Procesos dentro de objetivos
@@ -107,7 +107,7 @@ El sistema incluye archivos CSV de ejemplo para cada módulo:
 - **NC Abiertas**: No conformidades pendientes de cierre
 - **Auditorías Completadas**: Estado del programa de auditorías
 
-## 🏆 Cumplimiento ISO 9001:2015
+## · Cumplimiento ISO 9001:2015
 
 Este sistema está diseñado para cumplir con los requisitos de:
 - Cláusula 4: Contexto de la organización

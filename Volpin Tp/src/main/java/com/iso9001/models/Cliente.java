@@ -20,7 +20,6 @@ public class Cliente {
     private int numeroQuejas;
     private String representanteAsignado;
 
-    // Constructor
     public Cliente(String id, String nombre, String empresa, String email, String sector) {
         this.id = id;
         this.nombre = nombre;
@@ -35,7 +34,6 @@ public class Cliente {
         this.numeroQuejas = 0;
     }
 
-    // Métodos de negocio
     public void registrarEvaluacionSatisfaccion(double puntuacion) {
         if (puntuacion >= 1.0 && puntuacion <= 5.0) {
             evaluacionesSatisfaccion.add(puntuacion);
@@ -87,13 +85,12 @@ public class Cliente {
 
         if (ultimasEvaluaciones.size() < 2) return 0.0;
 
-        double primera = ultimasEvaluaciones.get(0);
-        double ultima = ultimasEvaluaciones.get(ultimasEvaluaciones.size() - 1);
+        double primera = ultimasEvaluaciones.getFirst();
+        double ultima = ultimasEvaluaciones.getLast();
 
         return ultima - primera;
     }
 
-    // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

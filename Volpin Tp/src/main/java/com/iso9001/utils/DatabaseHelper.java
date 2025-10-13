@@ -7,18 +7,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static java.lang.System.out;
+
 public class DatabaseHelper {
     private static final String DATA_FOLDER = "resources/data/";
     private static final String SEPARADOR = ",";
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    // Métodos para Procesos
     public static void guardarProcesos(List<Proceso> procesos) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(DATA_FOLDER + "procesos.csv"))) {
-            // Escribir encabezados
             writer.println("id,nombre,descripcion,tipo,responsable,objetivo,alcance,fechaCreacion,activo");
 
-            // Escribir datos
             for (Proceso proceso : procesos) {
                 writer.printf("%s,%s,\"%s\",%s,%s,\"%s\",\"%s\",%s,%s%n",
                         proceso.getId(),
@@ -32,7 +31,7 @@ public class DatabaseHelper {
                         proceso.isActivo()
                 );
             }
-            System.out.println("Procesos guardados exitosamente");
+            out.println("Procesos guardados exitosamente");
         } catch (IOException e) {
             System.err.println("Error al guardar procesos: " + e.getMessage());
         }
@@ -43,29 +42,28 @@ public class DatabaseHelper {
         File archivo = new File(DATA_FOLDER + "procesos.csv");
 
         if (!archivo.exists()) {
-            System.out.println("Archivo de procesos no existe, creando datos de ejemplo...");
+            out.println("Archivo de procesos no existe, creando datos de ejemplo...");
             return crearDatosEjemploProcesos();
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             reader.readLine();
-            String linea; // Saltar encabezados
+            String linea;
 
             while ((linea = reader.readLine()) != null) {
                 String[] datos = linea.split(SEPARADOR);
                 if (datos.length >= 8) {
                     try {
                         Proceso proceso = new Proceso(
-                                datos[0].trim(),                           // id
-                                datos[1].trim(),                           // nombre
-                                datos[2].replace("\"", "").trim(),         // descripcion
-                                TipoProceso.valueOf(datos[3].trim()),      // tipo
-                                datos[4].trim(),                           // responsable
-                                datos[5].replace("\"", "").trim(),         // objetivo
-                                datos[6].replace("\"", "").trim()          // alcance
+                                datos[0].trim(),
+                                datos[1].trim(),
+                                datos[2].replace("\"", "").trim(),
+                                TipoProceso.valueOf(datos[3].trim()),
+                                datos[4].trim(),
+                                datos[5].replace("\"", "").trim(),
+                                datos[6].replace("\"", "").trim()
                         );
 
-                        // Configurar fecha y estado
                         proceso.setFechaCreacion(LocalDate.parse(datos[7].trim(), FORMATO_FECHA));
                         if (datos.length > 8) {
                             proceso.setActivo(Boolean.parseBoolean(datos[8].trim()));
@@ -78,7 +76,7 @@ public class DatabaseHelper {
                 }
             }
 
-            System.out.println("Cargados " + procesos.size() + " procesos");
+            out.println("Cargados " + procesos.size() + " procesos");
         } catch (IOException e) {
             System.err.println("Error al cargar procesos: " + e.getMessage());
         }
@@ -86,7 +84,6 @@ public class DatabaseHelper {
         return procesos;
     }
 
-    // Métodos para Indicadores
     public static void guardarIndicadores(List<Indicador> indicadores) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(DATA_FOLDER + "indicadores.csv"))) {
             writer.println("id,nombre,descripcion,tipo,unidadMedida,valorObjetivo,valorActual,procesoId,fechaUltimaMedicion");
@@ -104,7 +101,7 @@ public class DatabaseHelper {
                         indicador.getFechaUltimaMedicion().format(FORMATO_FECHA)
                 );
             }
-            System.out.println("Indicadores guardados exitosamente");
+            out.println("Indicadores guardados exitosamente");
         } catch (IOException e) {
             System.err.println("Error al guardar indicadores: " + e.getMessage());
         }
@@ -120,20 +117,20 @@ public class DatabaseHelper {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             reader.readLine();
-            String linea; // Saltar encabezados
+            String linea;
 
             while ((linea = reader.readLine()) != null) {
                 String[] datos = linea.split(SEPARADOR);
                 if (datos.length >= 9) {
                     try {
                         Indicador indicador = new Indicador(
-                                datos[0].trim(),                               // id
-                                datos[1].trim(),                               // nombre
-                                datos[2].replace("\"", "").trim(),             // descripcion
-                                TipoIndicador.valueOf(datos[3].trim()),        // tipo
-                                datos[4].trim(),                               // unidadMedida
-                                Double.parseDouble(datos[5].trim()),           // valorObjetivo
-                                datos[7].trim()                                // procesoId
+                                datos[0].trim(),
+                                datos[1].trim(),
+                                datos[2].replace("\"", "").trim(),
+                                TipoIndicador.valueOf(datos[3].trim()),
+                                datos[4].trim(),
+                                datos[7].trim(),
+                                Double.parseDouble(datos[5].trim())
                         );
 
                         indicador.setValorActual(Double.parseDouble(datos[6].trim()));
@@ -146,7 +143,7 @@ public class DatabaseHelper {
                 }
             }
 
-            System.out.println("Cargados " + indicadores.size() + " indicadores");
+            out.println("Cargados " + indicadores.size() + " indicadores");
         } catch (IOException e) {
             System.err.println("Error al cargar indicadores: " + e.getMessage());
         }
@@ -154,7 +151,6 @@ public class DatabaseHelper {
         return indicadores;
     }
 
-    // Métodos para No Conformidades
     public static void guardarNoConformidades(List<NoConformidad> noConformidades) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(DATA_FOLDER + "no_conformidades.csv"))) {
             writer.println("id,titulo,descripcion,estado,prioridad,fechaDeteccion,procesoAfectado,responsableDeteccion,causaRaiz");
@@ -172,7 +168,7 @@ public class DatabaseHelper {
                         nc.getCausaRaiz() != null ? nc.getCausaRaiz() : ""
                 );
             }
-            System.out.println("No conformidades guardadas exitosamente");
+            out.println("No conformidades guardadas exitosamente");
         } catch (IOException e) {
             System.err.println("Error al guardar no conformidades: " + e.getMessage());
         }
@@ -188,19 +184,19 @@ public class DatabaseHelper {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             reader.readLine();
-            String linea; // Saltar encabezados
+            String linea;
 
             while ((linea = reader.readLine()) != null) {
                 String[] datos = linea.split(SEPARADOR);
                 if (datos.length >= 8) {
                     try {
                         NoConformidad nc = new NoConformidad(
-                                datos[0].trim(),                                   // id
-                                datos[1].trim(),                                   // titulo
-                                datos[2].replace("\"", "").trim(),                 // descripcion
-                                Prioridad.valueOf(datos[4].trim()),                // prioridad
-                                datos[6].trim(),                                   // procesoAfectado
-                                datos[7].trim()                                    // responsableDeteccion
+                                datos[0].trim(),
+                                datos[1].trim(),
+                                datos[2].replace("\"", "").trim(),
+                                Prioridad.valueOf(datos[4].trim()),
+                                datos[6].trim(),
+                                datos[7].trim()
                         );
 
                         nc.setEstado(EstadoNoConformidad.valueOf(datos[3].trim()));
@@ -217,7 +213,7 @@ public class DatabaseHelper {
                 }
             }
 
-            System.out.println("Cargadas " + noConformidades.size() + " no conformidades");
+            out.println("Cargadas " + noConformidades.size() + " no conformidades");
         } catch (IOException e) {
             System.err.println("Error al cargar no conformidades: " + e.getMessage());
         }
@@ -225,11 +221,9 @@ public class DatabaseHelper {
         return noConformidades;
     }
 
-    // Métodos para crear datos de ejemplo
     private static List<Proceso> crearDatosEjemploProcesos() {
         List<Proceso> procesos = new ArrayList<>();
 
-        // Procesos Estratégicos
         procesos.add(new Proceso("P001", "Planificación Estratégica", "Proceso de definición de objetivos y estrategias",
                 TipoProceso.ESTRATEGICO, "Director General",
                 "Establecer la dirección estratégica", "Toda la organización"));
@@ -238,7 +232,6 @@ public class DatabaseHelper {
                 TipoProceso.ESTRATEGICO, "Gerente Calidad",
                 "Mantener certificación ISO 9001", "Todos los procesos"));
 
-        // Procesos Operativos
         procesos.add(new Proceso("P003", "Desarrollo de Productos", "Proceso de creación y desarrollo de nuevos productos",
                 TipoProceso.OPERATIVO, "Jefe Ingeniería",
                 "Desarrollar productos de calidad", "Área de I+D"));
@@ -251,7 +244,6 @@ public class DatabaseHelper {
                 TipoProceso.OPERATIVO, "Gerente Comercial",
                 "Aumentar ventas y satisfacción del cliente", "Área comercial"));
 
-        // Procesos de Apoyo
         procesos.add(new Proceso("P006", "Gestión de Recursos Humanos", "Proceso de gestión del personal",
                 TipoProceso.APOYO, "Jefe RRHH",
                 "Gestionar el talento humano", "Toda la organización"));
@@ -268,7 +260,6 @@ public class DatabaseHelper {
         List<Indicador> indicadores = new ArrayList<>();
         Random random = new Random();
 
-        // Indicadores para cada proceso
         indicadores.add(new Indicador("I001", "Cumplimiento Objetivos Estratégicos", "Porcentaje de objetivos cumplidos",
                 TipoIndicador.EFICACIA, "%", 90.0, "P001"));
         indicadores.get(0).setValorActual(85.0 + random.nextDouble() * 10);
@@ -312,24 +303,22 @@ public class DatabaseHelper {
         return noConformidades;
     }
 
-    // Utilidades generales
     public static void crearCarpetaData() {
         File carpeta = new File(DATA_FOLDER);
         if (!carpeta.exists()) {
             carpeta.mkdirs();
-            System.out.println("Carpeta de datos creada: " + DATA_FOLDER);
+            out.println("Carpeta de datos creada: " + DATA_FOLDER);
         }
     }
 
     public static void inicializarDatos() {
         crearCarpetaData();
-        System.out.println("Inicializando base de datos...");
+        out.println("Inicializando base de datos...");
 
-        // Cargar o crear datos de ejemplo
         cargarProcesos();
         cargarIndicadores();
         cargarNoConformidades();
 
-        System.out.println("Base de datos inicializada correctamente");
+        out.println("Base de datos inicializada correctamente");
     }
 }

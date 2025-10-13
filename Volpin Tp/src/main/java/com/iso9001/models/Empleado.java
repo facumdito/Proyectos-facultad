@@ -20,7 +20,6 @@ public class Empleado {
     private String jefe;
     private boolean auditorInterno;
 
-    // Constructor
     public Empleado(String id, String nombre, String apellido, String email,
                     String cargo, String departamento) {
         this.id = id;
@@ -36,7 +35,6 @@ public class Empleado {
         this.auditorInterno = false;
     }
 
-    // Métodos de negocio
     public void agregarCertificacionISO(String certificacion) {
         if (!certificacionesISO.contains(certificacion)) {
             certificacionesISO.add(certificacion);
@@ -85,7 +83,6 @@ public class Empleado {
                 !necesitaCapacitacion();
     }
 
-    // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

@@ -16,48 +16,49 @@ public class Indicador {
     private double valorAnterior;
     private LocalDate fechaUltimaMedicion;
     private String formulaCalculo;
-    private String procesoId; // ID del proceso al que pertenece
+    private String procesoId;
     private List<Double> historialValores;
     private List<LocalDate> historialFechas;
 
-    // Constructor
-    public Indicador(String id, String nombre, String descripcion, TipoIndicador tipo,
-                     String unidadMedida, double valorObjetivo, String procesoId) {
+    public Indicador(String id, String nombre, String descripcion,
+                     TipoIndicador tipo, String unidadMedida,
+                     String procesoId, double valorObjetivo) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tipo = tipo;
         this.unidadMedida = unidadMedida;
-        this.valorObjetivo = valorObjetivo;
         this.procesoId = procesoId;
+        this.valorObjetivo = valorObjetivo;
+        this.valorActual = 0.0;
+        this.valorAnterior = 0.0;
+        this.fechaUltimaMedicion = LocalDate.now();
         this.historialValores = new ArrayList<>();
         this.historialFechas = new ArrayList<>();
-        this.fechaUltimaMedicion = LocalDate.now();
     }
 
-    // Métodos de negocio
+    public Indicador(String trim, String trim1, String trim2, TipoIndicador tipo, String trim3, double v, String trim4) {
+    }
+
     public void registrarMedicion(double valor) {
         this.valorAnterior = this.valorActual;
         this.valorActual = valor;
         this.fechaUltimaMedicion = LocalDate.now();
 
-        // Agregar al historial
         historialValores.add(valor);
         historialFechas.add(LocalDate.now());
 
-        // Mantener solo los últimos 12 registros
         if (historialValores.size() > 12) {
-            historialValores.remove(0);
-            historialFechas.remove(0);
+            historialValores.removeFirst();
+            historialFechas.removeFirst();
         }
     }
 
     public double calcularTendencia() {
         if (historialValores.size() < 2) return 0.0;
 
-        // Cálculo simple de tendencia (diferencia porcentual)
-        double valorInicial = historialValores.get(0);
-        double valorFinal = historialValores.get(historialValores.size() - 1);
+        double valorInicial = historialValores.getFirst();
+        double valorFinal = historialValores.getLast();
 
         if (valorInicial == 0) return 0.0;
         return ((valorFinal - valorInicial) / valorInicial) * 100;
@@ -73,18 +74,17 @@ public class Indicador {
     }
 
     public boolean estaDentroObjetivo() {
-        return Math.abs(valorActual - valorObjetivo) <= (valorObjetivo * 0.1); // 10% de tolerancia
+        return Math.abs(valorActual - valorObjetivo) <= (valorObjetivo * 0.1);
     }
 
     public String getEstadoSemaforo() {
         double diferencia = Math.abs(valorActual - valorObjetivo) / valorObjetivo;
 
-        if (diferencia <= 0.05) return "VERDE";      // Dentro del 5%
-        else if (diferencia <= 0.15) return "AMARILLO"; // Dentro del 15%
-        else return "ROJO";                              // Fuera del 15%
+        if (diferencia <= 0.05) return "VERDE";
+        else if (diferencia <= 0.15) return "AMARILLO";
+        else return "ROJO";
     }
 
-    // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -110,7 +110,9 @@ public class Indicador {
     public void setValorAnterior(double valorAnterior) { this.valorAnterior = valorAnterior; }
 
     public LocalDate getFechaUltimaMedicion() { return fechaUltimaMedicion; }
-    public void setFechaUltimaMedicion(LocalDate fechaUltimaMedicion) { this.fechaUltimaMedicion = fechaUltimaMedicion; }
+    public void setFechaUltimaMedicion(LocalDate fechaUltimaMedicion) {
+        this.fechaUltimaMedicion = fechaUltimaMedicion;
+    }
 
     public String getFormulaCalculo() { return formulaCalculo; }
     public void setFormulaCalculo(String formulaCalculo) { this.formulaCalculo = formulaCalculo; }

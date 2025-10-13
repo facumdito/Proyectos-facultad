@@ -5,13 +5,13 @@ import com.iso9001.models.AccionCorrectiva;
 import com.iso9001.enums.EstadoNoConformidad;
 import com.iso9001.enums.Prioridad;
 import com.iso9001.utils.DatabaseHelper;
-import java.time.LocalDate;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class NoConformidadManager {
     private List<NoConformidad> noConformidades;
-    private List<AccionCorrectiva> accionesCorrectivas;
+    private final List<AccionCorrectiva> accionesCorrectivas;
 
     public NoConformidadManager() {
         this.noConformidades = new ArrayList<>();
@@ -19,7 +19,6 @@ public class NoConformidadManager {
         cargarNoConformidades();
     }
 
-    // Operaciones CRUD para No Conformidades
     public void agregarNoConformidad(NoConformidad noConformidad) {
         if (noConformidad != null && !existeNoConformidad(noConformidad.getId())) {
             noConformidades.add(noConformidad);
@@ -58,7 +57,6 @@ public class NoConformidadManager {
     public boolean eliminarNoConformidad(String id) {
         boolean eliminada = noConformidades.removeIf(nc -> nc.getId().equals(id));
         if (eliminada) {
-            // También eliminar acciones correctivas asociadas
             accionesCorrectivas.removeIf(ac -> ac.getNoConformidadId().equals(id));
             guardarCambios();
             System.out.println("No conformidad eliminada: " + id);
@@ -66,7 +64,6 @@ public class NoConformidadManager {
         return eliminada;
     }
 
-    // Búsquedas y filtros
     public List<NoConformidad> buscarPorTitulo(String titulo) {
         return noConformidades.stream()
                 .filter(nc -> nc.getTitulo().toLowerCase().contains(titulo.toLowerCase()))
@@ -99,7 +96,6 @@ public class NoConformidadManager {
                 .collect(Collectors.toList());
     }
 
-    // Análisis y métricas
     public Map<EstadoNoConformidad, Long> obtenerEstadisticasPorEstado() {
         return noConformidades.stream()
                 .collect(Collectors.groupingBy(NoConformidad::getEstado, Collectors.counting()));
@@ -113,14 +109,14 @@ public class NoConformidadManager {
     public List<NoConformidad> obtenerNoConformidadesVencidas() {
         return noConformidades.stream()
                 .filter(NoConformidad::estaVencida)
-                .sorted((nc1, nc2) -> Long.compare(nc1.diasParaVencimiento(), nc2.diasParaVencimiento()))
+                .sorted(Comparator.comparingLong(NoConformidad::diasParaVencimiento))
                 .collect(Collectors.toList());
     }
 
     public List<NoConformidad> obtenerNoConformidadesPorVencer(int diasAnticipacion) {
         return noConformidades.stream()
                 .filter(nc -> !nc.estaVencida() && nc.diasParaVencimiento() <= diasAnticipacion)
-                .sorted((nc1, nc2) -> Long.compare(nc1.diasParaVencimiento(), nc2.diasParaVencimiento()))
+                .sorted(Comparator.comparingLong(NoConformidad::diasParaVencimiento))
                 .collect(Collectors.toList());
     }
 
@@ -138,15 +134,12 @@ public class NoConformidadManager {
     public double calcularPorcentajeCompletitudGeneral() {
         if (noConformidades.isEmpty()) return 0.0;
 
-        double totalCompletitud = noConformidades.stream()
+        return noConformidades.stream()
                 .mapToInt(NoConformidad::calcularPorcentajeCompletitud)
                 .average()
                 .orElse(0.0);
-
-        return totalCompletitud;
     }
 
-    // Gestión de estados
     public void cambiarEstado(String noConformidadId, EstadoNoConformidad nuevoEstado) {
         NoConformidad nc = obtenerNoConformidad(noConformidadId);
         if (nc != null) {
@@ -166,12 +159,10 @@ public class NoConformidadManager {
         }
     }
 
-    // Operaciones CRUD para Acciones Correctivas
     public void agregarAccionCorrectiva(AccionCorrectiva accion) {
         if (accion != null) {
             accionesCorrectivas.add(accion);
 
-            // Agregar a la no conformidad correspondiente
             NoConformidad nc = obtenerNoConformidad(accion.getNoConformidadId());
             if (nc != null) {
                 nc.agregarAccionCorrectiva(accion);
@@ -201,10 +192,9 @@ public class NoConformidadManager {
                 .orElse(null);
 
         if (accion != null) {
-            accion.marcarComoCompletada(resultado);
+            accion.marcarComoCompletada();
             System.out.println("Acción correctiva completada: " + accion.getDescripcion());
 
-            // Verificar si todas las acciones de la NC están completadas
             String ncId = accion.getNoConformidadId();
             List<AccionCorrectiva> acciones = obtenerAccionesCorrectivas(ncId);
             boolean todasCompletadas = acciones.stream().allMatch(AccionCorrectiva::isCompletada);
@@ -216,11 +206,9 @@ public class NoConformidadManager {
         }
     }
 
-    // Alertas y notificaciones
     public List<String> generarAlertas() {
         List<String> alertas = new ArrayList<>();
 
-        // Alertas por vencimiento
         List<NoConformidad> vencidas = obtenerNoConformidadesVencidas();
         if (!vencidas.isEmpty()) {
             alertas.add("¡ALERTA! " + vencidas.size() + " no conformidades vencidas");
@@ -231,7 +219,6 @@ public class NoConformidadManager {
             alertas.add("ATENCIÓN: " + porVencer.size() + " no conformidades vencen en 7 días");
         }
 
-        // Alertas por prioridad crítica
         long criticas = obtenerPorPrioridad(Prioridad.CRITICA).stream()
                 .filter(nc -> nc.getEstado() != EstadoNoConformidad.CERRADA)
                 .count();
@@ -242,7 +229,6 @@ public class NoConformidadManager {
         return alertas;
     }
 
-    // Validaciones
     public boolean existeNoConformidad(String id) {
         return noConformidades.stream().anyMatch(nc -> nc.getId().equals(id));
     }
@@ -254,11 +240,9 @@ public class NoConformidadManager {
         if (noConformidad.getDescripcion() == null || noConformidad.getDescripcion().trim().isEmpty()) return false;
         if (noConformidad.getPrioridad() == null) return false;
         if (noConformidad.getProcesoAfectado() == null || noConformidad.getProcesoAfectado().trim().isEmpty()) return false;
-        if (noConformidad.getResponsableDeteccion() == null || noConformidad.getResponsableDeteccion().trim().isEmpty()) return false;
-        return true;
+        return noConformidad.getResponsableDeteccion() != null && !noConformidad.getResponsableDeteccion().trim().isEmpty();
     }
 
-    // Reportes
     public String generarReporteNoConformidades() {
         StringBuilder reporte = new StringBuilder();
         reporte.append("REPORTE DE NO CONFORMIDADES\n");
@@ -284,7 +268,6 @@ public class NoConformidadManager {
         return reporte.toString();
     }
 
-    // Métodos de persistencia
     private void cargarNoConformidades() {
         this.noConformidades = DatabaseHelper.cargarNoConformidades();
         System.out.println("No conformidades cargadas: " + noConformidades.size());
@@ -294,17 +277,16 @@ public class NoConformidadManager {
         DatabaseHelper.guardarNoConformidades(noConformidades);
     }
 
-    // Getters para estadísticas
     public int getTotalNoConformidades() {
         return noConformidades.size();
     }
 
     public int getNoConformidadesAbiertas() {
-        return (int) obtenerPorEstado(EstadoNoConformidad.ABIERTA).size();
+        return obtenerPorEstado(EstadoNoConformidad.ABIERTA).size();
     }
 
     public int getNoConformidadesCerradas() {
-        return (int) obtenerPorEstado(EstadoNoConformidad.CERRADA).size();
+        return obtenerPorEstado(EstadoNoConformidad.CERRADA).size();
     }
 
     public int getNoConformidadesVencidas() {
