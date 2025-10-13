@@ -119,3 +119,5 @@ Este sistema está diseñado para cumplir con los requisitos de:
 - Cláusula 10: Mejora
 
 ---
+
+Alumnos: Chera Franco, Longo Tomás, Santini Facundo, Vendel Tomás
