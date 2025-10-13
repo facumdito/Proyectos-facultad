@@ -15,7 +15,6 @@ public class IndicadorManager {
         cargarIndicadores();
     }
 
-    // Operaciones CRUD
     public void agregarIndicador(Indicador indicador) {
         if (indicador != null && !existeIndicador(indicador.getId())) {
             indicadores.add(indicador);
@@ -59,7 +58,6 @@ public class IndicadorManager {
         }
     }
 
-    // Búsquedas y filtros
     public List<Indicador> buscarPorNombre(String nombre) {
         return indicadores.stream()
                 .filter(i -> i.getNombre().toLowerCase().contains(nombre.toLowerCase()))
@@ -84,7 +82,6 @@ public class IndicadorManager {
                 .collect(Collectors.toList());
     }
 
-    // Análisis y métricas
     public Map<String, Long> obtenerEstadisticasPorEstado() {
         Map<String, Long> estadisticas = new HashMap<>();
         estadisticas.put("VERDE", indicadores.stream().filter(i -> "VERDE".equals(i.getEstadoSemaforo())).count());
@@ -126,7 +123,6 @@ public class IndicadorManager {
                 .collect(Collectors.toList());
     }
 
-    // Operaciones de medición
     public void registrarMedicion(String indicadorId, double valor) {
         Indicador indicador = obtenerIndicador(indicadorId);
         if (indicador != null) {
@@ -147,7 +143,6 @@ public class IndicadorManager {
         }
     }
 
-    // Alertas y notificaciones
     public List<Indicador> obtenerIndicadoresConAlertas() {
         return indicadores.stream()
                 .filter(i -> !"VERDE".equals(i.getEstadoSemaforo()))
@@ -161,7 +156,6 @@ public class IndicadorManager {
                 .collect(Collectors.toList());
     }
 
-    // Validaciones
     public boolean existeIndicador(String id) {
         return indicadores.stream().anyMatch(i -> i.getId().equals(id));
     }
@@ -171,11 +165,12 @@ public class IndicadorManager {
         if (indicador.getId() == null || indicador.getId().trim().isEmpty()) return false;
         if (indicador.getNombre() == null || indicador.getNombre().trim().isEmpty()) return false;
         if (indicador.getTipo() == null) return false;
-        if (indicador.getValorObjetivo() < 0) return false;
-        return indicador.getProcesoId() != null && !indicador.getProcesoId().trim().isEmpty();
+        if (!(indicador.getValorObjetivo() < 0)) {
+            return indicador.getProcesoId() != null && !indicador.getProcesoId().trim().isEmpty();
+        }
+        return false;
     }
 
-    // Reportes
     public String generarReporteIndicadores() {
         StringBuilder reporte = new StringBuilder();
         reporte.append("REPORTE DE INDICADORES\n");
@@ -203,7 +198,6 @@ public class IndicadorManager {
         return reporte.toString();
     }
 
-    // Métodos de persistencia
     private void cargarIndicadores() {
         this.indicadores = DatabaseHelper.cargarIndicadores();
         System.out.println("Indicadores cargados: " + indicadores.size());
@@ -213,7 +207,6 @@ public class IndicadorManager {
         DatabaseHelper.guardarIndicadores(indicadores);
     }
 
-    // Getters para estadísticas
     public int getTotalIndicadores() {
         return indicadores.size();
     }

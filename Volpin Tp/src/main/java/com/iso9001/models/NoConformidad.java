@@ -23,7 +23,6 @@ public class NoConformidad {
     private String observaciones;
     private double impactoEconomico;
 
-    // Constructor
     public NoConformidad(String id, String titulo, String descripcion,
                          Prioridad prioridad, String procesoAfectado, String responsableDeteccion) {
         this.id = id;
@@ -36,11 +35,12 @@ public class NoConformidad {
         this.fechaDeteccion = LocalDate.now();
         this.accionesCorrectivas = new ArrayList<>();
 
-        // Calcular fecha límite basada en prioridad
         calcularFechaLimite();
     }
 
-    // Métodos de negocio
+    public NoConformidad(String id, String titulo, String descripcion, LocalDate fechaDeteccion, LocalDate fechaLimite, String proceso, String responsable, Prioridad prioridad) {
+    }
+
     private void calcularFechaLimite() {
         switch (prioridad) {
             case CRITICA:
@@ -91,7 +91,6 @@ public class NoConformidad {
         return (int) ((accionesCompletadas * 100) / accionesCorrectivas.size());
     }
 
-    // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -107,7 +106,7 @@ public class NoConformidad {
     public Prioridad getPrioridad() { return prioridad; }
     public void setPrioridad(Prioridad prioridad) {
         this.prioridad = prioridad;
-        calcularFechaLimite(); // Recalcular fecha límite
+        calcularFechaLimite();
     }
 
     public LocalDate getFechaDeteccion() { return fechaDeteccion; }
@@ -144,5 +143,9 @@ public class NoConformidad {
     public String toString() {
         return String.format("NoConformidad{id='%s', titulo='%s', estado=%s, prioridad=%s}",
                 id, titulo, estado, prioridad);
+    }
+
+    public boolean todasAccionesCompletadas() {
+        return false;
     }
 }

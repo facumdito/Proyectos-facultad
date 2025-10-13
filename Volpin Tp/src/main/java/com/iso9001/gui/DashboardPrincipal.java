@@ -6,26 +6,19 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.time.LocalDate;
 
-/**
- * Dashboard Principal del Sistema ISO 9001
- * Versión final con integración completa de ventanas
- */
 public class DashboardPrincipal extends JFrame {
 
-    // Managers del sistema
     private ProcesoManager procesoManager;
     private IndicadorManager indicadorManager;
     private NoConformidadManager noConformidadManager;
     private AuditoriaManager auditoriaManager;
 
-    // Referencias a ventanas secundarias
     private VentanaProcesos ventanaProcesos;
     private VentanaIndicadores ventanaIndicadores;
     private VentanaNoConformidades ventanaNoConformidades;
     private VentanaAuditorias ventanaAuditorias;
     private VentanaReportes ventanaReportes;
 
-    // Componentes de la interfaz
     private JTextArea areaAlertas;
     private JLabel lblTotalProcesos;
     private JLabel lblIndicadoresVerde;
@@ -33,7 +26,6 @@ public class DashboardPrincipal extends JFrame {
     private JLabel lblNCAbiertas;
     private JLabel lblAuditoriasCompletadas;
 
-    // Constructor
     public DashboardPrincipal() {
         inicializarManagers();
         configurarVentana();
@@ -45,7 +37,6 @@ public class DashboardPrincipal extends JFrame {
         try {
             System.out.println("Inicializando managers del sistema...");
 
-            // Inicializar managers en el orden correcto
             this.indicadorManager = new IndicadorManager();
             this.procesoManager = new ProcesoManager(indicadorManager);
             this.noConformidadManager = new NoConformidadManager();
@@ -60,10 +51,12 @@ public class DashboardPrincipal extends JFrame {
 
     private void mostrarAdvertenciaManagers() {
         JOptionPane.showMessageDialog(this,
-                "Los managers del sistema no pudieron inicializarse completamente.\n\n" +
-                        "El sistema funcionará con funcionalidad limitada.\n" +
-                        "Algunas ventanas mostrarán datos temporales hasta que\n" +
-                        "los componentes estén completamente disponibles.",
+                """
+                        Los managers del sistema no pudieron inicializarse completamente.
+                        
+                        El sistema funcionará con funcionalidad limitada.
+                        Algunas ventanas mostrarán datos temporales hasta que
+                        los componentes estén completamente disponibles.""",
                 "Advertencia del Sistema",
                 JOptionPane.WARNING_MESSAGE);
     }
@@ -75,7 +68,6 @@ public class DashboardPrincipal extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Configurar Look & Feel
         configurarLookAndFeel();
     }
 
@@ -93,11 +85,9 @@ public class DashboardPrincipal extends JFrame {
     }
 
     private void crearComponentes() {
-        // Panel superior - Título y fecha
         JPanel panelTitulo = crearPanelTitulo();
         add(panelTitulo, BorderLayout.NORTH);
 
-        // Panel central - Estadísticas y alertas
         JPanel panelEstadisticas = crearPanelEstadisticas();
         JPanel panelAlertas = crearPanelAlertas();
 
@@ -108,7 +98,6 @@ public class DashboardPrincipal extends JFrame {
 
         add(panelCentral, BorderLayout.CENTER);
 
-        // Panel inferior - Navegación
         JPanel panelNavegacion = crearPanelNavegacion();
         add(panelNavegacion, BorderLayout.SOUTH);
     }
@@ -137,9 +126,8 @@ public class DashboardPrincipal extends JFrame {
         panel.setBorder(new TitledBorder("Estadísticas Generales"));
         panel.setBackground(Color.WHITE);
 
-        // Tarjetas de estadísticas con referencias guardadas
-        panel.add(crearTarjetaEstadistica("Procesos Activos", "0", new Color(46, 204, 113), "procesoIcon"));
-        panel.add(crearTarjetaEstadistica("Indicadores Verde", "0", new Color(39, 174, 96), "indicadorIcon"));
+        panel.add(crearTarjetaEstadistica("Procesos Activos", "0", new Color(255, 125, 227), "procesoIcon"));
+        panel.add(crearTarjetaEstadistica("Indicadores Verde", "0", new Color(52, 251, 0), "indicadorIcon"));
         panel.add(crearTarjetaEstadistica("Indicadores Rojo", "0", new Color(231, 76, 60), "alertIcon"));
         panel.add(crearTarjetaEstadistica("NC Abiertas", "0", new Color(241, 196, 15), "ncIcon"));
         panel.add(crearTarjetaEstadistica("Auditorías Completadas", "0", new Color(155, 89, 182), "auditoriaIcon"));
@@ -161,7 +149,6 @@ public class DashboardPrincipal extends JFrame {
         lblValor.setForeground(Color.WHITE);
         lblValor.setFont(new Font("Arial", Font.BOLD, 28));
 
-        // Guardar referencias para actualizaciones
         switch (iconType) {
             case "procesoIcon":
                 lblTotalProcesos = lblValor;
@@ -206,7 +193,6 @@ public class DashboardPrincipal extends JFrame {
         panel.setBackground(new Color(236, 240, 241));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Botones de navegación con eventos reales
         JButton btnProcesos = crearBotonNavegacion("Gestionar Procesos", new Color(41, 128, 185));
         JButton btnIndicadores = crearBotonNavegacion("Gestionar Indicadores", new Color(39, 174, 96));
         JButton btnNoConformidades = crearBotonNavegacion("No Conformidades", new Color(231, 76, 60));
@@ -214,13 +200,12 @@ public class DashboardPrincipal extends JFrame {
         JButton btnReportes = crearBotonNavegacion("Reportes", new Color(241, 196, 15));
         JButton btnActualizar = crearBotonNavegacion("Actualizar", new Color(52, 73, 94));
 
-        // Asignar eventos para abrir ventanas reales
-        btnProcesos.addActionListener(e -> abrirVentanaProcesos());
-        btnIndicadores.addActionListener(e -> abrirVentanaIndicadores());
-        btnNoConformidades.addActionListener(e -> abrirVentanaNoConformidades());
-        btnAuditorias.addActionListener(e -> abrirVentanaAuditorias());
-        btnReportes.addActionListener(e -> abrirVentanaReportes());
-        btnActualizar.addActionListener(e -> actualizarDashboard());
+        btnProcesos.addActionListener(_ -> abrirVentanaProcesos());
+        btnIndicadores.addActionListener(_ -> abrirVentanaIndicadores());
+        btnNoConformidades.addActionListener(_ -> abrirVentanaNoConformidades());
+        btnAuditorias.addActionListener(_ -> abrirVentanaAuditorias());
+        btnReportes.addActionListener(_ -> abrirVentanaReportes());
+        btnActualizar.addActionListener(_ -> actualizarDashboard());
 
         panel.add(btnProcesos);
         panel.add(btnIndicadores);
@@ -242,7 +227,6 @@ public class DashboardPrincipal extends JFrame {
         boton.setBorderPainted(false);
         boton.setFont(new Font("Arial", Font.BOLD, 12));
 
-        // Efecto hover
         boton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 boton.setBackground(color.brighter());
@@ -257,20 +241,16 @@ public class DashboardPrincipal extends JFrame {
     }
 
     private void actualizarDashboard() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    // Actualizar estadísticas con datos reales
-                    actualizarEstadisticasReales();
+        SwingUtilities.invokeLater(() -> {
+            try {
+                actualizarEstadisticasReales();
 
-                    // Actualizar alertas
-                    actualizarAlertas();
+                actualizarAlertas();
 
-                    System.out.println("Dashboard actualizado: " + LocalDate.now());
-                } catch (Exception e) {
-                    System.err.println("Error al actualizar dashboard: " + e.getMessage());
-                    actualizarEstadisticasTemporales();
-                }
+                System.out.println("Dashboard actualizado: " + LocalDate.now());
+            } catch (Exception e) {
+                System.err.println("Error al actualizar dashboard: " + e.getMessage());
+                actualizarEstadisticasTemporales();
             }
         });
     }
@@ -300,7 +280,6 @@ public class DashboardPrincipal extends JFrame {
     }
 
     private void actualizarEstadisticasTemporales() {
-        // Datos temporales para desarrollo
         lblTotalProcesos.setText("5");
         lblIndicadoresVerde.setText("8");
         lblIndicadoresRojo.setText("2");
@@ -314,7 +293,6 @@ public class DashboardPrincipal extends JFrame {
         alertas.append("Fecha: ").append(LocalDate.now()).append("\n\n");
 
         try {
-            // Alertas reales de los managers
             if (noConformidadManager != null) {
                 for (String alerta : noConformidadManager.generarAlertas()) {
                     alertas.append("• ").append(alerta).append("\n");
@@ -327,7 +305,6 @@ public class DashboardPrincipal extends JFrame {
                 }
             }
 
-            // Resumen de indicadores
             if (indicadorManager != null) {
                 alertas.append("\n📊 RESUMEN DE INDICADORES:\n");
                 alertas.append("• Total indicadores: ").append(indicadorManager.getTotalIndicadores()).append("\n");
@@ -336,7 +313,6 @@ public class DashboardPrincipal extends JFrame {
             }
 
         } catch (Exception e) {
-            // Alertas de ejemplo en caso de error
             alertas.append("⚠ ALERTAS ACTIVAS:\n\n");
             alertas.append("• 2 No conformidades próximas a vencer\n");
             alertas.append("• Indicador 'Satisfacción Cliente' por debajo del objetivo\n");
@@ -346,10 +322,6 @@ public class DashboardPrincipal extends JFrame {
         areaAlertas.setText(alertas.toString());
         areaAlertas.setCaretPosition(0);
     }
-
-    // ===============================================================
-    // MÉTODOS PARA ABRIR VENTANAS REALES
-    // ===============================================================
 
     private void abrirVentanaProcesos() {
         try {
@@ -439,7 +411,6 @@ public class DashboardPrincipal extends JFrame {
         }
     }
 
-    // Método para manejar cuando un manager no está disponible
     private void manejarManagerNoDisponible(String nombreVentana) {
         JOptionPane.showMessageDialog(this,
                 "El módulo " + nombreVentana + " no está disponible.\n\n" +
@@ -453,7 +424,6 @@ public class DashboardPrincipal extends JFrame {
                 JOptionPane.WARNING_MESSAGE);
     }
 
-    // Método para manejar errores al abrir ventanas
     private void manejarErrorVentana(String nombreVentana, Exception e) {
         String mensajeError = "Error al abrir la ventana: " + nombreVentana +
                 "\nDetalle: " + e.getMessage();
@@ -461,19 +431,14 @@ public class DashboardPrincipal extends JFrame {
         System.err.println(mensajeError);
         e.printStackTrace();
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                JOptionPane.showMessageDialog(DashboardPrincipal.this,
-                        "No se pudo abrir la ventana de " + nombreVentana + ".\n\n" +
-                                "Error técnico: " + e.getMessage() + "\n\n" +
-                                "Por favor, contacte al administrador del sistema.",
-                        "Error - " + nombreVentana,
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(DashboardPrincipal.this,
+                "No se pudo abrir la ventana de " + nombreVentana + ".\n\n" +
+                        "Error técnico: " + e.getMessage() + "\n\n" +
+                        "Por favor, contacte al administrador del sistema.",
+                "Error - " + nombreVentana,
+                JOptionPane.ERROR_MESSAGE));
     }
 
-    // Métodos auxiliares para cerrar ventanas
     public void cerrarTodasLasVentanas() {
         try {
             if (ventanaProcesos != null && ventanaProcesos.isDisplayable()) {
@@ -501,12 +466,8 @@ public class DashboardPrincipal extends JFrame {
         super.dispose();
     }
 
-    // Método main para testing
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new DashboardPrincipal().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new DashboardPrincipal().setVisible(true));
     }
 }

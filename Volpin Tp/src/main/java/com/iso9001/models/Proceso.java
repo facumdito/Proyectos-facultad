@@ -18,7 +18,6 @@ public class Proceso {
     private String objetivo;
     private String alcance;
 
-    // Constructor
     public Proceso(String id, String nombre, String descripcion, TipoProceso tipo, String responsable) {
         this.id = id;
         this.nombre = nombre;
@@ -31,7 +30,6 @@ public class Proceso {
         this.indicadores = new ArrayList<>();
     }
 
-    // Constructor para cargar desde archivo
     public Proceso(String id, String nombre, String descripcion, TipoProceso tipo,
                    String responsable, String objetivo, String alcance) {
         this(id, nombre, descripcion, tipo, responsable);
@@ -39,7 +37,6 @@ public class Proceso {
         this.alcance = alcance;
     }
 
-    // Métodos de negocio
     public void agregarIndicador(Indicador indicador) {
         if (!indicadores.contains(indicador)) {
             indicadores.add(indicador);
@@ -63,7 +60,6 @@ public class Proceso {
         this.fechaUltimaRevision = LocalDate.now();
     }
 
-    // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

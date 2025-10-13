@@ -6,20 +6,19 @@ import com.iso9001.utils.ReporteGenerator;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class VentanaReportes extends JFrame {
-    private ProcesoManager procesoManager;
-    private IndicadorManager indicadorManager;
-    private NoConformidadManager noConformidadManager;
+    private final ProcesoManager procesoManager;
+    private final IndicadorManager indicadorManager;
+    private final NoConformidadManager noConformidadManager;
 
     private JTextArea areaReporte;
     private JComboBox<String> comboTipoReporte;
-    private JButton btnGenerar;
     private JButton btnExportar;
     private String ultimoReporte;
 
@@ -41,15 +40,12 @@ public class VentanaReportes extends JFrame {
     }
 
     private void crearComponentes() {
-        // Panel superior - Controles
         JPanel panelControles = crearPanelControles();
         add(panelControles, BorderLayout.NORTH);
 
-        // Panel central - Área de reporte
         JPanel panelReporte = crearPanelReporte();
         add(panelReporte, BorderLayout.CENTER);
 
-        // Panel inferior - Botones
         JPanel panelBotones = crearPanelBotones();
         add(panelBotones, BorderLayout.SOUTH);
     }
@@ -71,12 +67,12 @@ public class VentanaReportes extends JFrame {
 
         panel.add(comboTipoReporte);
 
-        btnGenerar = new JButton("Generar Reporte");
+        JButton btnGenerar = new JButton("Generar Reporte");
         btnGenerar.addActionListener(this::generarReporte);
         panel.add(btnGenerar);
 
         JButton btnLimpiar = new JButton("Limpiar");
-        btnLimpiar.addActionListener(e -> limpiarReporte());
+        btnLimpiar.addActionListener(_ -> limpiarReporte());
         panel.add(btnLimpiar);
 
         return panel;
@@ -111,7 +107,7 @@ public class VentanaReportes extends JFrame {
         btnImprimir.addActionListener(this::mostrarVistaPrevia);
 
         JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> dispose());
+        btnCerrar.addActionListener(_ -> dispose());
 
         panel.add(btnExportar);
         panel.add(btnImprimir);
@@ -155,6 +151,8 @@ public class VentanaReportes extends JFrame {
                     reporte.append(generarDashboardEjecutivo());
                     break;
 
+                case null:
+                    break;
                 default:
                     reporte.append("Tipo de reporte no reconocido.");
             }
@@ -186,21 +184,18 @@ public class VentanaReportes extends JFrame {
         reporte.append("=".repeat(50)).append("\n");
         reporte.append("Fecha: ").append(LocalDate.now()).append("\n\n");
 
-        // Estadísticas generales
         reporte.append("RESUMEN EJECUTIVO\n");
         reporte.append("-".repeat(25)).append("\n");
         reporte.append("Total de procesos: ").append(procesoManager.getTotalProcesos()).append("\n");
         reporte.append("Procesos activos: ").append(procesoManager.getProcesosActivos()).append("\n");
         reporte.append("Eficiencia promedio: ").append(String.format("%.1f%%", procesoManager.calcularEficienciaPromedio())).append("\n\n");
 
-        // Procesos por tipo
         reporte.append("DISTRIBUCIÓN POR TIPO\n");
         reporte.append("-".repeat(25)).append("\n");
         procesoManager.obtenerEstadisticasPorTipo().forEach((tipo, cantidad) ->
                 reporte.append(tipo.getNombre()).append(": ").append(cantidad).append(" procesos\n")
         );
 
-        // Procesos con indicadores críticos
         List<Proceso> procesosConProblemas = procesoManager.obtenerProcesosConIndicadoresCriticos();
         if (!procesosConProblemas.isEmpty()) {
             reporte.append("\nPROCESOS CON INDICADORES CRÍTICOS\n");
@@ -232,57 +227,44 @@ public class VentanaReportes extends JFrame {
     }
 
     private String generarAnalisisCumplimiento() {
-        StringBuilder reporte = new StringBuilder();
 
-        reporte.append("ANÁLISIS DE CUMPLIMIENTO ISO 9001:2015\n");
-        reporte.append("=".repeat(45)).append("\n");
-        reporte.append("Fecha: ").append(LocalDate.now()).append("\n\n");
+        return "ANÁLISIS DE CUMPLIMIENTO ISO 9001:2015\n" +
+                "=".repeat(45) + "\n" +
+                "Fecha: " + LocalDate.now() + "\n\n" +
 
-        // Evaluación por requisitos
-        reporte.append("EVALUACIÓN POR REQUISITOS ISO 9001\n");
-        reporte.append("-".repeat(35)).append("\n");
+                "EVALUACIÓN POR REQUISITOS ISO 9001\n" +
+                "-".repeat(35) + "\n" +
 
-        // 4. Contexto de la organización
-        reporte.append("4. Contexto de la organización: ");
-        reporte.append(evaluarRequisito("contexto")).append("\n");
+                "4. Contexto de la organización: " +
+                evaluarRequisito() + "\n" +
 
-        // 5. Liderazgo
-        reporte.append("5. Liderazgo: ");
-        reporte.append(evaluarRequisito("liderazgo")).append("\n");
+                "5. Liderazgo: " +
+                evaluarRequisito() + "\n" +
 
-        // 6. Planificación
-        reporte.append("6. Planificación: ");
-        reporte.append(evaluarRequisito("planificacion")).append("\n");
+                "6. Planificación: " +
+                evaluarRequisito() + "\n" +
 
-        // 7. Apoyo
-        reporte.append("7. Apoyo: ");
-        reporte.append(evaluarRequisito("apoyo")).append("\n");
+                "7. Apoyo: " +
+                evaluarRequisito() + "\n" +
 
-        // 8. Operación
-        reporte.append("8. Operación: ");
-        reporte.append(evaluarRequisito("operacion")).append("\n");
+                "8. Operación: " +
+                evaluarRequisito() + "\n" +
 
-        // 9. Evaluación del desempeño
-        reporte.append("9. Evaluación del desempeño: ");
-        reporte.append(evaluarRequisito("evaluacion")).append("\n");
+                "9. Evaluación del desempeño: " +
+                evaluarRequisito() + "\n" +
 
-        // 10. Mejora
-        reporte.append("10. Mejora: ");
-        reporte.append(evaluarRequisito("mejora")).append("\n\n");
+                "10. Mejora: " +
+                evaluarRequisito() + "\n\n" +
 
-        // Recomendaciones
-        reporte.append("RECOMENDACIONES\n");
-        reporte.append("-".repeat(20)).append("\n");
-        reporte.append("• Mantener documentación actualizada\n");
-        reporte.append("• Realizar auditorías internas periódicas\n");
-        reporte.append("• Implementar mejora continua\n");
-        reporte.append("• Capacitar personal en ISO 9001\n");
-
-        return reporte.toString();
+                "RECOMENDACIONES\n" +
+                "-".repeat(20) + "\n" +
+                "• Mantener documentación actualizada\n" +
+                "• Realizar auditorías internas periódicas\n" +
+                "• Implementar mejora continua\n" +
+                "• Capacitar personal en ISO 9001\n";
     }
 
-    private String evaluarRequisito(String requisito) {
-        // Evaluación simplificada basada en el estado del sistema
+    private String evaluarRequisito() {
         double cumplimiento = indicadorManager.calcularPorcentajeCumplimientoGeneral();
 
         if (cumplimiento >= 90) return "CONFORME ✓";
@@ -297,7 +279,6 @@ public class VentanaReportes extends JFrame {
         reporte.append("=".repeat(50)).append("\n");
         reporte.append("Fecha: ").append(LocalDate.now()).append("\n\n");
 
-        // KPIs principales
         reporte.append("INDICADORES CLAVE DE RENDIMIENTO (KPIs)\n");
         reporte.append("-".repeat(40)).append("\n");
         reporte.append("Procesos Activos: ").append(procesoManager.getProcesosActivos()).append("\n");
@@ -305,14 +286,12 @@ public class VentanaReportes extends JFrame {
         reporte.append("No Conformidades Abiertas: ").append(noConformidadManager.getNoConformidadesAbiertas()).append("\n");
         reporte.append("No Conformidades Vencidas: ").append(noConformidadManager.getNoConformidadesVencidas()).append("\n\n");
 
-        // Semáforo de estado
         reporte.append("SEMÁFORO DE ESTADO\n");
         reporte.append("-".repeat(20)).append("\n");
         reporte.append("Indicadores Verde: ").append(indicadorManager.getIndicadoresVerde()).append("\n");
         reporte.append("Indicadores Amarillo: ").append(indicadorManager.getIndicadoresAmarillo()).append("\n");
         reporte.append("Indicadores Rojo: ").append(indicadorManager.getIndicadoresRojo()).append("\n\n");
 
-        // Tendencias
         reporte.append("TENDENCIAS\n");
         reporte.append("-".repeat(12)).append("\n");
         List<Indicador> mejoresTendencias = indicadorManager.obtenerIndicadoresConMejorTendencia();
@@ -342,13 +321,13 @@ public class VentanaReportes extends JFrame {
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Exportar Reporte");
-        fileChooser.setSelectedFile(new java.io.File("reporte_iso9001_" + LocalDate.now() + ".txt"));
+        fileChooser.setSelectedFile(new File("reporte_iso9001_" + LocalDate.now() + ".txt"));
 
         int userSelection = fileChooser.showSaveDialog(this);
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             try {
-                java.io.File archivoDestino = fileChooser.getSelectedFile();
+                File archivoDestino = fileChooser.getSelectedFile();
 
                 try (FileWriter writer = new FileWriter(archivoDestino)) {
                     writer.write(ultimoReporte);
@@ -390,7 +369,7 @@ public class VentanaReportes extends JFrame {
 
         JPanel panelBotones = new JPanel(new FlowLayout());
         JButton btnCerrarVista = new JButton("Cerrar Vista");
-        btnCerrarVista.addActionListener(ev -> dialogoVista.dispose());
+        btnCerrarVista.addActionListener(_ -> dialogoVista.dispose());
         panelBotones.add(btnCerrarVista);
 
         dialogoVista.add(panelBotones, BorderLayout.SOUTH);
