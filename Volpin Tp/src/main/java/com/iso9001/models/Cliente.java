@@ -3,6 +3,8 @@ package com.iso9001.models;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class Cliente {
     private String id;
@@ -141,5 +143,14 @@ public class Cliente {
     public String toString() {
         return String.format("Cliente{id='%s', nombre='%s', empresa='%s', satisfaccion=%.2f}",
                 id, nombre, empresa, satisfaccionPromedio);
+    }
+
+    public boolean tieneEmailValido() {
+        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(this.email);
+
+        return matcher.matches();
     }
 }

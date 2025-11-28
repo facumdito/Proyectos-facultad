@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ProcesoManager {
+public class            ProcesoManager {
     private List<Proceso> procesos;
     private IndicadorManager indicadorManager;
 
